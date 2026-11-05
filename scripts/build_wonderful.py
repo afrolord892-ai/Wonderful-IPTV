@@ -329,7 +329,7 @@ def enrich_and_key(entry: Entry, by_id, by_name_country,
     tvg_id = (attrs.get("tvg-id") or "").strip()
     country = (attrs.get("tvg-country") or country_from_id(tvg_id)).upper()
     if not country and attrs.get("group-title"):
-        match = re.match(r"^([A-Z]{2,3})\\s*\\|", attrs["group-title"])
+        match = re.match(r"^([A-Z]{2,3})\s*\|", attrs["group-title"])
         country = match.group(1) if match else ""
     entry.name_key = normalized_name(entry.name)
 
