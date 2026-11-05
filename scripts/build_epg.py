@@ -304,8 +304,12 @@ def finalize() -> None:
         "unique_channel_id_coverage_percent": pct,
         "guide_days": 2,
         "guide_url": EPG_URL,
-Exact TVG/XMLTV IDs plus exact, unambiguous channel-name mappings within declared source countries.
-"limitations": "Only channels with a matching public guide source and programme data are covered; unmatched or ambiguous channels remain without EPG.",
+        "match_method": "Exact TVG/XMLTV IDs plus exact, unambiguous channel-name mappings within declared source countries.",
+        "coverage_target_percent": 80,
+        "channels_required_for_80_percent": (len(wanted_ids) * 80 + 99) // 100,
+        "additional_channels_needed_for_80_percent": max(((len(wanted_ids) * 80 + 99) // 100) - len(covered_ids), 0),
+        "guide_window_hours": 72,
+        "limitations": "Only channels with a matching public guide source and programme data are covered; unmatched or ambiguous channels remain without EPG.",
     }
     country_report_path = EPG_DIR / "country-merge-report.json"
     if country_report_path.is_file():
