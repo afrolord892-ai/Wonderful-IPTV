@@ -1,0 +1,48 @@
+name: Build Wonderful IPTV playlist
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/build_wonderful.py'
+      - '.github/workflows/build-wonderful.yml'
+  workflow_dispatch:
+  schedule:
+    - cron: "0 4 * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: wonderful-iptv-playlist-v2
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build worldwide playlist
+        run: python scripts/build_wonderful.py
+
+      - name: Publish updated playlist
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add playlists/Wonderful.m3u playlists/Wonderful-report.json
+          if git diff --cached --quiet; then
+            echo "Wonderful playlist is already up to date."
+          else
+            git commit -m "Update Wonderful IPTV playlist"
+            git push
+          fi
