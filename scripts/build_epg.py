@@ -59,7 +59,7 @@ def unsafe(text: str) -> bool:
     return any(term in value for term in BLOCKED_TERMS)
 
 def parse_attrs(line: str) -> dict[str, str]:
-    return {k.lower(): v for k, v in re.findall(r'([\\w-]+)="([^"]*)"', line)}
+    return {k.lower(): v for k, v in re.findall(r'([\w-]+)="([^"]*)"', line)}
 
 def load_playlist() -> tuple[list[dict[str, str]], set[str]]:
     if not PLAYLIST.is_file():
@@ -94,7 +94,7 @@ def mapping_files(epg_repo: Path) -> list[tuple[Path, str, str]]:
     epgshare_dir = sites / "epgshare01.online"
     if epgshare_dir.is_dir():
         for path in sorted(epgshare_dir.glob("epgshare01.online_*.channels.xml")):
-            match = re.fullmatch(r"epgshare01\\.online_(.+)\\.channels\\.xml", path.name)
+            match = re.fullmatch(r"epgshare01\.online_(.+)\.channels\.xml", path.name)
             if match and match.group(1) in EPGSHARE_TAGS:
                 selected.append((path, "epgshare01.online", match.group(1)))
     for relpath, site in OTHER_FILES:
@@ -122,8 +122,6 @@ def prepare(epg_repo: Path) -> None:
                 continue
             lang = (channel.get("lang") or "en").strip() or "en"
             source_site_id = (channel.get("site_id") or "").strip()
-            if site == "epgshare01.online":
-                source_site_id = f"{tag}#{xmltv_id}"
             if not source_site_id:
                 continue
             if xmltv_id not in candidates:
@@ -153,7 +151,7 @@ def prepare(epg_repo: Path) -> None:
         "guide_days_requested": 2,
         "match_method": "Exact tvg-id to XMLTV xmltv_id only; no fuzzy programme matching.",
     }
-    (EPG_DIR / "prepare-report.json").write_text(json.dumps(metrics, indent=2) + "\\n", encoding="utf-8")
+    (EPG_DIR / "prepare-report.json").write_text(json.dumps(metrics, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(metrics, indent=2))
 
 def finalize() -> None:
@@ -202,13 +200,13 @@ def finalize() -> None:
         except json.JSONDecodeError:
             existing = {}
     existing["epg"] = report
-    REPORT.write_text(json.dumps(existing, indent=2, ensure_ascii=False) + "\\n", encoding="utf-8")
+    REPORT.write_text(json.dumps(existing, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
     lines = PLAYLIST.read_text(encoding="utf-8").splitlines()
     lines = [line for line in lines if not line.startswith("#EXTM3U")]
     header = f'#EXTM3U x-tvg-url="{EPG_URL}" url-tvg="{EPG_URL}"'
-    PLAYLIST.write_text("\\n".join([header, *lines]) + "\\n", encoding="utf-8")
-    (EPG_DIR / "report.json").write_text(json.dumps(report, indent=2) + "\\n", encoding="utf-8")
+    PLAYLIST.write_text("\n".join([header, *lines]) + "\n", encoding="utf-8")
+    (EPG_DIR / "report.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(report, indent=2))
 
 def main() -> int:
