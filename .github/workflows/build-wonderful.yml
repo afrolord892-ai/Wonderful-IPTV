@@ -1,10 +1,11 @@
-name: Build Wonderful IPTV playlist
+name: Build Wonderful IPTV playlist and EPG
 
 on:
   push:
     branches: [main]
     paths:
       - 'scripts/build_wonderful.py'
+      - 'scripts/build_epg.py'
       - '.github/workflows/build-wonderful.yml'
   workflow_dispatch:
   schedule:
@@ -20,9 +21,9 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 120
     steps:
-      - name: Check out repository
+      - name: Check out Wonderful
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -35,14 +36,39 @@ jobs:
       - name: Build worldwide playlist
         run: python scripts/build_wonderful.py
 
-      - name: Publish updated playlist
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Check out public EPG sources
+        run: git clone --depth 1 https://github.com/iptv-org/epg.git "$RUNNER_TEMP/iptv-org-epg"
+
+      - name: Install EPG dependencies
+        working-directory: ${{ runner.temp }}/iptv-org-epg
+        run: npm ci
+
+      - name: Select exact EPG matches
+        run: python scripts/build_epg.py prepare "$RUNNER_TEMP/iptv-org-epg"
+
+      - name: Generate two-day XMLTV guide
+        working-directory: ${{ runner.temp }}/iptv-org-epg
+        run: |
+          npm run grab -- --channels="$GITHUB_WORKSPACE/epg/channels.xml" --output="$GITHUB_WORKSPACE/epg/guide.xml" --gzip --days=2 --maxConnections=5
+
+      - name: Verify guide coverage and attach EPG URL
+        run: |
+          python scripts/build_epg.py finalize
+          rm -f epg/guide.xml
+
+      - name: Publish playlist, guide and coverage report
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add playlists/Wonderful.m3u playlists/Wonderful-report.json
+          git add playlists/Wonderful.m3u playlists/Wonderful-report.json epg/channels.xml epg/guide.xml.gz epg/report.json epg/prepare-report.json
           if git diff --cached --quiet; then
-            echo "Wonderful playlist is already up to date."
+            echo "Wonderful playlist and EPG are already up to date."
           else
-            git commit -m "Update Wonderful IPTV playlist"
+            git commit -m "Update Wonderful IPTV playlist and EPG"
             git push
           fi
