@@ -92,28 +92,28 @@ def normalize_channel_name(value: str) -> str:
     value = unicodedata.normalize("NFKD", value)
     value = "".join(ch for ch in value if not unicodedata.combining(ch))
     value = value.casefold()
-    value = re.sub(r"\\s*[\\[(]\\s*(?:sd|hd|fhd|uhd|4k|8k|hevc|h\\.?264|h\\.?265)\\s*[\\])]\\s*$", "", value)
-    value = re.sub(r"[^\\w]+", " ", value)
-    return re.sub(r"\\s+", " ", value).strip()
+    value = re.sub(r"\s*[\[(]\s*(?:sd|hd|fhd|uhd|4k|8k|hevc|h\.?264|h\.?265)\s*[\])]\s*$", "", value)
+    value = re.sub(r"[^\w]+", " ", value)
+    return re.sub(r"\s+", " ", value).strip()
 
 
 def countries_from_attrs(attrs: dict[str, str]) -> set[str]:
     codes = set()
     raw = attrs.get("tvg-country", "")
-    for part in re.split(r"[;,|/\\s]+", raw.upper()):
+    for part in re.split(r"[;,|/\s]+", raw.upper()):
         code = COUNTRY_ALIASES.get(part.strip(), part.strip())
         if code in COUNTRY_CODES:
             codes.add(code)
     if not codes:
         group = attrs.get("group-title", "")
-        match = re.match(r"^\\s*([A-Z]{2,3})\\s*\\|", group, re.I)
+        match = re.match(r"^\s*([A-Z]{2,3})\s*\|", group, re.I)
         if match:
             code = COUNTRY_ALIASES.get(match.group(1).upper(), match.group(1).upper())
             if code in COUNTRY_CODES:
                 codes.add(code)
     if not codes:
         tvg_id = attrs.get("tvg-id", "").split("@", 1)[0]
-        match = re.search(r"\\.([a-z]{2,3})$", tvg_id, re.I)
+        match = re.search(r"\.([a-z]{2,3})$", tvg_id, re.I)
         if match:
             code = COUNTRY_ALIASES.get(match.group(1).upper(), match.group(1).upper())
             if code in COUNTRY_CODES:
@@ -178,7 +178,7 @@ def mapping_files(epg_repo: Path):
     epgshare_dir = sites / "epgshare01.online"
     if epgshare_dir.is_dir():
         for path in sorted(epgshare_dir.glob("epgshare01.online_*.channels.xml")):
-            match = re.fullmatch(r"epgshare01\\.online_(.+)\\.channels\\.xml", path.name)
+            match = re.fullmatch(r"epgshare01\.online_(.+)\.channels\.xml", path.name)
             if not match:
                 continue
             tag = match.group(1)
@@ -188,7 +188,7 @@ def mapping_files(epg_repo: Path):
             if tag == "US_LOCALS2":
                 codes.add("US")
             else:
-                country_match = re.match(r"^([A-Z]{2})\\d", tag)
+                country_match = re.match(r"^([A-Z]{2})\d", tag)
                 if country_match and country_match.group(1) in COUNTRY_CODES:
                     codes.add(country_match.group(1))
             selected.append((path, "epgshare01.online", tag, codes))
@@ -266,11 +266,11 @@ def prepare(epg_repo: Path) -> None:
         "guide_days_requested": 2,
         "match_method": "Exact TVG/XMLTV IDs first; otherwise unique exact normalized channel names within a source country. Ambiguous names are not guessed.",
     }
-    (EPG_DIR / "prepare-report.json").write_text(json.dumps(metrics, indent=2) + "\\n", encoding="utf-8")
+    (EPG_DIR / "prepare-report.json").write_text(json.dumps(metrics, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(metrics, indent=2))
 
 def finalize() -> None:
-    records, wanted_ids = load_playlist()
+    records, wanted_ids, _, _ = load_playlist()
     if not GUIDE_GZ.is_file() or GUIDE_GZ.stat().st_size == 0:
         raise RuntimeError(f"Generated compressed XMLTV guide is missing or empty: {GUIDE_GZ}")
     channel_ids: set[str] = set()
@@ -304,8 +304,8 @@ def finalize() -> None:
         "unique_channel_id_coverage_percent": pct,
         "guide_days": 2,
         "guide_url": EPG_URL,
-        "match_method": "Exact tvg-id to XMLTV channel/programme ID matching only.",
-        "limitations": "Only channels with a matching public guide source and programme data are covered; unmatched channels remain without EPG.",
+Exact TVG/XMLTV IDs plus exact, unambiguous channel-name mappings within declared source countries.
+"limitations": "Only channels with a matching public guide source and programme data are covered; unmatched or ambiguous channels remain without EPG.",
     }
     country_report_path = EPG_DIR / "country-merge-report.json"
     if country_report_path.is_file():
