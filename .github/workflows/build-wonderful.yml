@@ -56,6 +56,9 @@ jobs:
         run: |
           npm run grab -- --channels="$GITHUB_WORKSPACE/epg/channels.xml" --output="$GITHUB_WORKSPACE/epg/guide.xml" --gzip --days=2 --maxConnections=5
 
+      - name: Merge regional country XMLTV guides
+        run: python scripts/merge_country_epg.py
+
       - name: Verify guide coverage and attach EPG URL
         run: |
           python scripts/build_epg.py finalize
@@ -65,7 +68,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add playlists/Wonderful.m3u playlists/Wonderful-report.json epg/channels.xml epg/guide.xml.gz epg/report.json epg/prepare-report.json
+          git add playlists/Wonderful.m3u playlists/Wonderful-report.json epg/channels.xml epg/guide.xml.gz epg/report.json epg/prepare-report.json epg/country-merge-report.json
           if git diff --cached --quiet; then
             echo "Wonderful playlist and EPG are already up to date."
           else
