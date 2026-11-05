@@ -496,7 +496,7 @@ def main() -> int:
     for entry in all_entries:
         if entry.trust == "catalog":
             if enrich_and_key(entry, channels_by_id, channels_by_name_country, ids_by_name_country, ids_by_name):
-                counters[\"tvg_id_inferred\"] += 1
+                counters["tvg_id_inferred"] += 1
             if is_verified_catalog_entry(entry, channels_by_id, channels_by_name_country, nsfw_ids, curated_urls):
                 entry.trust = "IPTV-org-officially-matched"
             else:
@@ -542,7 +542,7 @@ def main() -> int:
             parsed = parse_m3u(page_m3u, "IPTV Cat", "discovery")
             for entry in parsed:
                 if enrich_and_key(entry, channels_by_id, channels_by_name_country, ids_by_name_country, ids_by_name):
-                counters[\"tvg_id_inferred\"] += 1
+                    counters["tvg_id_inferred"] += 1
                 listed_status = online_status.get(entry.name_key)
                 if listed_status is False:
                     offline_count += 1
@@ -594,7 +594,7 @@ def main() -> int:
         if any(term in group or term in title for term in BLOCKED_EXTINF):
             continue
         if enrich_and_key(entry, channels_by_id, channels_by_name_country, ids_by_name_country, ids_by_name):
-            counters[\"tvg_id_inferred\"] += 1
+            counters["tvg_id_inferred"] += 1
         host = host_of(entry.url)
         if not host or any(host_matches(host, d) for d in DENIED_HOSTS):
             continue
