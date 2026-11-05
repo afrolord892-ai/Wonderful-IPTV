@@ -192,6 +192,12 @@ def finalize() -> None:
         "match_method": "Exact tvg-id to XMLTV channel/programme ID matching only.",
         "limitations": "Only channels with a matching public guide source and programme data are covered; unmatched channels remain without EPG.",
     }
+    country_report_path = EPG_DIR / "country-merge-report.json"
+    if country_report_path.is_file():
+        try:
+            report["country_feed_merge"] = json.loads(country_report_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            report["country_feed_merge"] = {"warning": "Country-feed merge report could not be read."}
     REPORT.parent.mkdir(parents=True, exist_ok=True)
     existing = {}
     if REPORT.is_file():
