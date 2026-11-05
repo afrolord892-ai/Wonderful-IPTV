@@ -1,13 +1,10 @@
-name: Build Wonderful IPTV playlist and EPG
+name: Build Wonderful IPTV playlist
 
 on:
   push:
     branches: [main]
     paths:
       - 'scripts/build_wonderful.py'
-      - 'scripts/build_epg.py'
-      - 'scripts/merge_country_epg.py'
-      - '.github/workflows/build-wonderful.yml'
   workflow_dispatch:
   schedule:
     - cron: "0 4 * * *"
@@ -34,105 +31,17 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Decide whether to rebuild the channel catalogue
-        id: mode
-        shell: bash
-        env:
-          EVENT_NAME: ${{ github.event_name }}
-          BEFORE_SHA: ${{ github.event.before }}
-          CURRENT_SHA: ${{ github.sha }}
-        run: |
-          if [[ "$EVENT_NAME" == "schedule" || "$EVENT_NAME" == "workflow_dispatch" || -z "$BEFORE_SHA" || "$BEFORE_SHA" =~ ^0+$ ]]; then
-            echo "rebuild_playlist=true" >> "$GITHUB_OUTPUT"
-          else
-            changed_files="$(git diff --name-only "$BEFORE_SHA" "$CURRENT_SHA")"
-            if printf '%s\\n' "$changed_files" | grep -Eq '^(scripts/build_wonderful.py)
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-
-      - name: Check out public EPG sources
-        run: git clone --depth 1 https://github.com/iptv-org/epg.git "$RUNNER_TEMP/iptv-org-epg"
-
-      - name: Install EPG dependencies
-        working-directory: ${{ runner.temp }}/iptv-org-epg
-        run: npm ci
-
-      - name: Select exact EPG matches
-        run: python scripts/build_epg.py prepare "$RUNNER_TEMP/iptv-org-epg"
-
-      - name: Generate two-day XMLTV guide
-        working-directory: ${{ runner.temp }}/iptv-org-epg
-        run: |
-          npm run grab -- --channels="$GITHUB_WORKSPACE/epg/channels.xml" --output="$GITHUB_WORKSPACE/epg/guide.xml" --gzip --days=2 --maxConnections=5
-
-      - name: Merge regional country XMLTV guides
-        run: python scripts/merge_country_epg.py
-
-      - name: Verify guide coverage and attach EPG URL
-        run: |
-          python scripts/build_epg.py finalize
-          rm -f epg/guide.xml
-
-      - name: Publish playlist, guide and coverage report
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add playlists/Wonderful.m3u playlists/Wonderful-report.json epg/channels.xml epg/guide.xml.gz epg/report.json epg/prepare-report.json epg/country-merge-report.json
-          if git diff --cached --quiet; then
-            echo "Wonderful playlist and EPG are already up to date."
-          else
-            git commit -m "Update Wonderful IPTV playlist and EPG"
-            git push
-          fi
-; then
-              echo "rebuild_playlist=true" >> "$GITHUB_OUTPUT"
-            else
-              echo "rebuild_playlist=false" >> "$GITHUB_OUTPUT"
-            fi
-          fi
-
       - name: Build worldwide playlist
-        if: steps.mode.outputs.rebuild_playlist == 'true'
         run: python scripts/build_wonderful.py
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-
-      - name: Check out public EPG sources
-        run: git clone --depth 1 https://github.com/iptv-org/epg.git "$RUNNER_TEMP/iptv-org-epg"
-
-      - name: Install EPG dependencies
-        working-directory: ${{ runner.temp }}/iptv-org-epg
-        run: npm ci
-
-      - name: Select exact EPG matches
-        run: python scripts/build_epg.py prepare "$RUNNER_TEMP/iptv-org-epg"
-
-      - name: Generate two-day XMLTV guide
-        working-directory: ${{ runner.temp }}/iptv-org-epg
-        run: |
-          npm run grab -- --channels="$GITHUB_WORKSPACE/epg/channels.xml" --output="$GITHUB_WORKSPACE/epg/guide.xml" --gzip --days=2 --maxConnections=5
-
-      - name: Merge regional country XMLTV guides
-        run: python scripts/merge_country_epg.py
-
-      - name: Verify guide coverage and attach EPG URL
-        run: |
-          python scripts/build_epg.py finalize
-          rm -f epg/guide.xml
-
-      - name: Publish playlist, guide and coverage report
+      - name: Publish updated playlist
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add playlists/Wonderful.m3u playlists/Wonderful-report.json epg/channels.xml epg/guide.xml.gz epg/report.json epg/prepare-report.json epg/country-merge-report.json
+          git add playlists/Wonderful.m3u playlists/Wonderful-report.json
           if git diff --cached --quiet; then
-            echo "Wonderful playlist and EPG are already up to date."
+            echo "Wonderful playlist is already up to date."
           else
-            git commit -m "Update Wonderful IPTV playlist and EPG"
+            git commit -m "Update Wonderful IPTV playlist"
             git push
           fi
