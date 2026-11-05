@@ -53,7 +53,7 @@ EPGSHARE_TAGS = {
     "AR1", "AU1", "BA1", "BE2", "BG1", "BR1", "CA1", "CH1", "CL1",
     "CO1", "CR1", "CY1", "CZ1", "DE1", "DK1", "DO1", "EC1", "EG1",
     "ES1", "FI1", "FR1", "GR1", "HK1", "HR1", "HU1", "ID1", "IE1",
-    "IL1", "IN4", "IT1", "JM1", "JP1", "JP2", "KE1", "KR1", "MT1",
+    "IL1", "IN4", "IT1", "JM1", "NG1", "JP1", "JP2", "KE1", "KR1", "MT1",
     "MX1", "MY1", "NL1", "NO1", "NZ1", "PA1", "PE1", "PH1", "PH2",
     "PK1", "PL1", "PT1", "RO1", "RO2", "SA1", "SA2", "SE1", "SG1",
     "SK1", "SV1", "TR1", "TR3", "UK1", "US1", "US_LOCALS2", "UY1",
