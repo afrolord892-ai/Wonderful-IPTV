@@ -220,7 +220,7 @@ def programme_in_window(elem) -> bool:
     upper = now + dt.timedelta(days=3)
     def parse_xmltv(value: str):
         value = (value or "").strip()
-        match = re.match(r"^(\\d{14})(?:\\s*([+-]\\d{4}|Z))?", value)
+        match = re.match(r"^(\d{14})(?:\s*([+-]\d{4}|Z))?", value)
         if not match:
             return None
         stamp, zone = match.groups()
