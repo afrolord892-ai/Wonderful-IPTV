@@ -39,6 +39,14 @@ GE DE GH GR GT HN HK HU IS IN ID IL IT JM LV LB LT LU MK MY MT MX ME NL NZ
 NI NG NO PA PY PE PH PL PT RO RU RS SG SI ZA KR ES SE CH TW TH TT TR UG UA
 AE GB US UY VE ZW
 """.split())
+COUNTRY_ALIASES = {
+    "UK": "GB",
+    "USA": "US",
+    "UAE": "AE",
+    "RSA": "ZA",
+    "KOR": "KR",
+    "RUS": "RU",
+}
 
 BLOCKED_TERMS = (
     "adult", "xxx", "porn", "erotic", "18+", "casino", "gambling",
@@ -81,17 +89,22 @@ def attrs_from_extinf(line: str) -> dict[str, str]:
 
 def country_for(attrs: dict[str, str]) -> str:
     explicit = (attrs.get("tvg-country") or "").strip().upper()
+    explicit = COUNTRY_ALIASES.get(explicit, explicit)
     if explicit in COUNTRY_CODES:
         return explicit
     group = attrs.get("group-title", "")
     m = re.match(r"^\s*([A-Z]{2})\s*\|", group, re.I)
-    if m and m.group(1).upper() in COUNTRY_CODES:
-        return m.group(1).upper()
+    if m:
+        group_code = COUNTRY_ALIASES.get(m.group(1).upper(), m.group(1).upper())
+        if group_code in COUNTRY_CODES:
+            return group_code
     channel_id = attrs.get("tvg-id", "")
     # Covers IDs such as Channel.ng and US local IDs such as Station.us_locals1.
     m = re.search(r"\.([a-z]{2})(?:_[a-z0-9]+)?$", channel_id, re.I)
-    if m and m.group(1).upper() in COUNTRY_CODES:
-        return m.group(1).upper()
+    if m:
+        id_code = COUNTRY_ALIASES.get(m.group(1).upper(), m.group(1).upper())
+        if id_code in COUNTRY_CODES:
+            return id_code
     return ""
 
 
