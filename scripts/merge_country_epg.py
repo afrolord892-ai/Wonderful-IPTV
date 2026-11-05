@@ -92,6 +92,7 @@ OPEN_EPG_FEEDS = {
 BLOCKED_TERMS = (
     "adult", "xxx", "porn", "erotic", "18+", "casino", "gambling",
     "betting", "sportsbook", "sports book", "bookmaker", "wager", "poker",
+    "draftkings", "fanduel", "bet365", "betway", "sportsbet", "1xbet",
 )
 QUALITY_SUFFIX = re.compile(
     r"\s*[\[(]\s*(?:sd|hd|fhd|uhd|4k|8k|hevc|h\.?264|h\.?265)\s*[\])]\s*$",
