@@ -151,8 +151,8 @@ def load_playlist():
 
 
 def download_country(code: str, directory: Path):
-    url = f"https://iptv-epg.org/files/epg-{code.casefold()}.xml"
-    target = directory / f"epg-{code.casefold()}.xml"
+    url = f"https://iptv-epg.org/files/epg-{code.casefold()}.xml.gz"
+    target = directory / f"epg-{code.casefold()}.xml.gz"
     last_error = None
     for attempt in range(3):
         try:
@@ -168,12 +168,15 @@ def download_country(code: str, directory: Path):
                 if response.status != 200:
                     raise RuntimeError(f"HTTP {response.status}")
                 ctype = response.headers.get("Content-Type", "").casefold()
-                if "xml" not in ctype and "text" not in ctype and "octet-stream" not in ctype:
-                    raise RuntimeError(f"Unexpected content type: {ctype}")
+                if "gzip" not in ctype and "octet-stream" not in ctype:
+                    raise RuntimeError(f"Unexpected compressed guide content type: {ctype}")
                 with target.open("wb") as out:
                     shutil.copyfileobj(response, out, length=1024 * 1024)
             if target.stat().st_size < 128:
                 raise RuntimeError("Guide feed is unexpectedly small")
+            with gzip.open(target, "rb") as check:
+                if not check.read(1):
+                    raise RuntimeError("Compressed guide feed is empty")
             return code, target, target.stat().st_size, None
         except Exception as exc:
             last_error = str(exc)
@@ -187,6 +190,15 @@ def download_country(code: str, directory: Path):
 
 def local_tag(element) -> str:
     return element.tag.rsplit("}", 1)[-1]
+
+
+def iterparse_xml(path: Path, events):
+    if path.name.endswith(".gz"):
+        with gzip.open(path, "rb") as source:
+            yield from ET.iterparse(source, events=events)
+    else:
+        with path.open("rb") as source:
+            yield from ET.iterparse(source, events=events)
 
 
 def safe_programme(elem, channel_name: str) -> bool:
@@ -222,7 +234,7 @@ def parse_base_guide(base_xml: Path, ids: set[str], titles_by_id: dict[str, str]
     count = 0
     root = None
     try:
-        for event, elem in ET.iterparse(base_xml, events=("start", "end")):
+        for event, elem in iterparse_xml(base_xml, events=("start", "end")):
             if event == "start" and root is None:
                 root = elem
                 continue
@@ -248,7 +260,7 @@ def parse_base_guide(base_xml: Path, ids: set[str], titles_by_id: dict[str, str]
 def map_country_channels(path: Path, code: str, ids, by_country_name, global_name_ids):
     feed_to_playlist: dict[str, str] = {}
     root = None
-    for event, elem in ET.iterparse(path, events=("start", "end")):
+    for event, elem in iterparse_xml(path, events=("start", "end")):
         if event == "start" and root is None:
             root = elem
             continue
@@ -290,7 +302,7 @@ def map_country_channels(path: Path, code: str, ids, by_country_name, global_nam
 def parse_country_programmes(path: Path, feed_to_playlist, titles_by_id, spool, seen):
     count = 0
     root = None
-    for event, elem in ET.iterparse(path, events=("start", "end")):
+    for event, elem in iterparse_xml(path, events=("start", "end")):
         if event == "start" and root is None:
             root = elem
             continue
