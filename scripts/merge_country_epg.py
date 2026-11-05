@@ -7,6 +7,7 @@ within the same country. It never creates synthetic programme listings.
 from __future__ import annotations
 
 import concurrent.futures as cf
+import datetime as dt
 import gzip
 import html
 import json
@@ -212,8 +213,38 @@ def safe_programme(elem, channel_name: str) -> bool:
     return True
 
 
+def programme_in_window(elem) -> bool:
+    """Retain current and near-future programmes only; discard stale schedules."""
+    now = dt.datetime.now(dt.timezone.utc)
+    lower = now - dt.timedelta(hours=3)
+    upper = now + dt.timedelta(days=3)
+    def parse_xmltv(value: str):
+        value = (value or "").strip()
+        match = re.match(r"^(\\d{14})(?:\\s*([+-]\\d{4}|Z))?", value)
+        if not match:
+            return None
+        stamp, zone = match.groups()
+        try:
+            naive = dt.datetime.strptime(stamp, "%Y%m%d%H%M%S")
+            if not zone or zone == "Z":
+                tz = dt.timezone.utc
+            else:
+                sign = 1 if zone[0] == "+" else -1
+                offset = dt.timedelta(hours=int(zone[1:3]), minutes=int(zone[3:5]))
+                tz = dt.timezone(sign * offset)
+            return naive.replace(tzinfo=tz).astimezone(dt.timezone.utc)
+        except ValueError:
+            return None
+    start = parse_xmltv(elem.get("start", ""))
+    stop = parse_xmltv(elem.get("stop", ""))
+    if start is None:
+        return False
+    end = stop or start
+    return end >= lower and start <= upper
+
+
 def add_programme(elem, target_id: str, spool, seen: set[tuple[str, str]], channel_name: str):
-    if not safe_programme(elem, channel_name):
+    if not safe_programme(elem, channel_name) or not programme_in_window(elem):
         return False
     start = elem.get("start", "")
     if not start:
@@ -363,7 +394,8 @@ def main():
         seen: set[tuple[str, str]] = set()
         spool_path = tempdir / "programmes.xml.part"
         with spool_path.open("wb") as spool:
-            base_count = parse_base_guide(BASE_XML, ids, titles_by_id, spool, seen)
+            # Fresh country feeds take priority. The previously published
+            # iptv-org guide fills only programme slots not supplied by them.
             country_counts = {}
             for code, path in sorted(country_files.items()):
                 mapping = map_country_channels(path, code, ids, by_country_name, global_name_ids)
@@ -373,6 +405,7 @@ def main():
                     "programmes_added": added,
                 }
                 print(f"{code}: mapped {country_counts[code]['mapped_channels']} channels; added {added} programmes")
+            base_count = parse_base_guide(BASE_XML, ids, titles_by_id, spool, seen)
 
         covered, xml_bytes, gz_bytes = write_merged_guide(
             spool_path, GUIDE_XML, GUIDE_GZ, titles_by_id, seen
@@ -392,8 +425,10 @@ def main():
             "xmltv_size_bytes": xml_bytes,
             "xmltv_gzip_size_bytes": gz_bytes,
             "match_policy": "Exact TVG/XMLTV ID, or exact normalized display-name match in the same country when unambiguous. No fuzzy name matching and no synthetic programmes.",
-            "guide_source": "iptv-epg.org country XMLTV feeds plus existing iptv-org/epg guide.",
+            "guide_source": "Fresh iptv-epg.org country XMLTV feeds prioritized over the previously published iptv-org/epg guide.",
+
             "filtered_categories": "Unsafe or inappropriate channel labels and programme titles/descriptions are excluded.",
+            "programme_time_window": "Current programmes and programmes scheduled within the next 72 hours; stale programme records are omitted.",
         }
         REPORT_OUT.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         print(json.dumps(report, indent=2))
