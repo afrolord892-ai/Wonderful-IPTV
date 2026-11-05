@@ -56,7 +56,7 @@ SOURCES = [
 CHANNELS_DB_URL = "https://iptv-org.github.io/api/channels.json"
 IPTVCAT_SITEMAP = "https://iptvcat.com/sitemap"
 IPTVCAT_EXPORT = "https://iptvcat.com/ajax/streams_a?action=playlist_download"
-USER_AGENT = "Wonderful-IPTV-Playlist/1.0 (+https://github.com/godspoweronari2010-cmyk/Ai-assistant)"
+USER_AGENT = "Wonderful-IPTV-Playlist/1.0 (+https://github.com/afrolord892-ai/Wonderful-IPTV)"
 MAX_CAT_PAGES = 500
 REQUEST_DELAY = 0.05
 CAT_WORKERS = 8
@@ -599,25 +599,34 @@ def main() -> int:
         e.url,
     ))
 
-    header = [
-        "#EXTM3U",
-        "# Wonderful IPTV playlist",
-        "# Sources: IPTV-org, IPTV Cat, Free-TV/IPTV, FreeCastHub, LegalFreeIPTV, Doubo, WizakorHD, Tubi, Roku, Plex, Pluto TV, Samsung TV Plus and Apsattv.",
-        "# Deduplication: each exact stream URL is listed once; distinct URLs for the same channel are retained.",
-        "# Source and verification/status comments identify catalogue-listed, officially matched, online-listed, offline-listed or unknown entries.",
-    ]
-    output_lines = list(header)
+    # IPTV Smarters and other strict M3U parsers are most compatible when
+    # each EXTINF record is followed immediately by its stream URL. Keep
+    # provenance and verification detail in the JSON report, not between
+    # playlist records.
+    def smarters_extinf(entry: Entry) -> str:
+        source_attrs = attributes(entry.extinf)
+        allowed_attrs = ("tvg-id", "tvg-name", "tvg-logo", "group-title", "tvg-country", "tvg-language")
+        rendered_attrs = []
+        for key in allowed_attrs:
+            value = source_attrs.get(key)
+            if value:
+                value = re.sub(r"[\\r\\n]+", " ", value).replace("&", "&amp;").replace('"', "&quot;")
+                rendered_attrs.append(f'{key}="{value}"')
+        title = re.sub(r"[\\r\\n]+", " ", clean_name(entry.name)).strip() or "Unknown channel"
+        suffix = (" " + " ".join(rendered_attrs)) if rendered_attrs else ""
+        return f"#EXTINF:-1{suffix},{title}"
+
+    output_lines = ["#EXTM3U"]
     for entry in deduped:
-        output_lines.append(entry.extinf)
-        output_lines.append(f"#SOURCE: {entry.source} | VERIFICATION/STATUS: {entry.trust}")
-        output_lines.extend(entry.tags)
+        output_lines.append(smarters_extinf(entry))
         output_lines.append(entry.url)
-    OUT.write_text("\n".join(output_lines) + "\n", encoding="utf-8")
+    OUT.write_text("\\n".join(output_lines) + "\\n", encoding="utf-8")
 
     counters["final_channels_or_streams"] = len(deduped)
     counters["unique_channel_identities"] = len({e.channel_key for e in deduped})
     counters["generated_utc"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
     counters["output_bytes"] = OUT.stat().st_size
+    counters["playlist_format"] = "Strict M3U: #EXTM3U header; each #EXTINF record is immediately followed by its HTTP(S) stream URL; source verification details are retained in this JSON report."
     counters["source_notes"] = {
         "IPTV-org": "Complete HTTP/HTTPS source catalogue retained except NSFW/blocked/denied-host entries; broadcaster-domain matches are labelled.",
         "IPTV Cat": "Exported HTTP/HTTPS rows retained except NSFW/blocked/denied-host entries; online/offline/unknown status and domain-match labels are included.",
