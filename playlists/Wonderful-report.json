@@ -323,8 +323,9 @@
   "iptvorg_unverified_retained": 7042,
   "final_channels_or_streams": 37274,
   "unique_channel_identities": 30972,
-  "generated_utc": "2026-11-05T17:16:10Z",
-  "output_bytes": 19174251,
+  "generated_utc": "2026-11-05T18:00:30Z",
+  "output_bytes": 15604717,
+  "playlist_format": "Strict M3U: #EXTM3U header; each #EXTINF record is immediately followed by its HTTP(S) stream URL; source verification details are retained in this JSON report.",
   "source_notes": {
     "IPTV-org": "Complete HTTP/HTTPS source catalogue retained except NSFW/blocked/denied-host entries; broadcaster-domain matches are labelled.",
     "IPTV Cat": "Exported HTTP/HTTPS rows retained except NSFW/blocked/denied-host entries; online/offline/unknown status and domain-match labels are included.",
