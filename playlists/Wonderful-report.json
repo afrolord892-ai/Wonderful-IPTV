@@ -314,17 +314,21 @@
       "error": "IPTV Cat country export returned no playlist data"
     }
   ],
-  "iptvcat_entries_unverified": 15312,
+  "iptvcat_entries_unverified": 14733,
   "iptvcat_entries_accepted": 17728,
-  "iptvcat_offline_entries_retained": 833,
+  "iptvcat_offline_entries_retained": 835,
   "non_http_rejected": 0,
   "duplicate_same_channel_same_url": 0,
   "duplicate_url_other_name": 14356,
+  "tvg_id_inferred": 12054,
   "iptvorg_unverified_retained": 7042,
-  "final_channels_or_streams": 37274,
-  "unique_channel_identities": 30972,
-  "generated_utc": "2026-11-05T18:00:30Z",
-  "output_bytes": 15604717,
+  "final_channels_or_streams": 37269,
+  "playlist_entries_with_tvg_id": 30867,
+  "playlist_entries_without_tvg_id": 6402,
+  "unique_tvg_ids": 26621,
+  "unique_channel_identities": 28031,
+  "generated_utc": "2026-11-05T18:25:31Z",
+  "output_bytes": 15757002,
   "playlist_format": "Strict M3U: #EXTM3U header; each #EXTINF record is immediately followed by its HTTP(S) stream URL; source verification details are retained in this JSON report.",
   "source_notes": {
     "IPTV-org": "Complete HTTP/HTTPS source catalogue retained except NSFW/blocked/denied-host entries; broadcaster-domain matches are labelled.",
@@ -336,5 +340,18 @@
     "Free-TV/IPTV": "Curated free-TV source; subject to broadcaster and geographic restrictions.",
     "FreeCastHub": "Curated free public-broadcaster source.",
     "LegalFreeIPTV": "Curated legal-free feed with published acceptance criteria."
+  },
+  "epg": {
+    "playlist_stream_entries": 30867,
+    "playlist_unique_tvg_ids": 26621,
+    "xmltv_channel_ids": 950,
+    "xmltv_channel_ids_with_programmes": 822,
+    "playlist_tvg_ids_with_programmes": 822,
+    "playlist_entries_with_programmes": 1370,
+    "unique_channel_id_coverage_percent": 3.09,
+    "guide_days": 2,
+    "guide_url": "https://raw.githubusercontent.com/afrolord892-ai/Wonderful-IPTV/main/epg/guide.xml.gz",
+    "match_method": "Exact tvg-id to XMLTV channel/programme ID matching only.",
+    "limitations": "Only channels with a matching public guide source and programme data are covered; unmatched channels remain without EPG."
   }
 }

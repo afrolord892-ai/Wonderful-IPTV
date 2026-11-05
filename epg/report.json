@@ -1,0 +1,13 @@
+{
+  "playlist_stream_entries": 30867,
+  "playlist_unique_tvg_ids": 26621,
+  "xmltv_channel_ids": 950,
+  "xmltv_channel_ids_with_programmes": 822,
+  "playlist_tvg_ids_with_programmes": 822,
+  "playlist_entries_with_programmes": 1370,
+  "unique_channel_id_coverage_percent": 3.09,
+  "guide_days": 2,
+  "guide_url": "https://raw.githubusercontent.com/afrolord892-ai/Wonderful-IPTV/main/epg/guide.xml.gz",
+  "match_method": "Exact tvg-id to XMLTV channel/programme ID matching only.",
+  "limitations": "Only channels with a matching public guide source and programme data are covered; unmatched channels remain without EPG."
+}

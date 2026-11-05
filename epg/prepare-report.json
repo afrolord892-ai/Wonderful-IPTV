@@ -1,0 +1,15 @@
+{
+  "playlist_stream_entries": 30867,
+  "playlist_entries_with_safe_tvg_id": 30867,
+  "playlist_unique_tvg_ids": 26621,
+  "matched_guide_channel_ids": 950,
+  "matched_source_mapping_counts": {
+    "arirang.com": 1,
+    "distro.tv": 12,
+    "freeview.co.uk": 62,
+    "i.mjh.nz": 873,
+    "rtp.pt": 2
+  },
+  "guide_days_requested": 2,
+  "match_method": "Exact tvg-id to XMLTV xmltv_id only; no fuzzy programme matching."
+}
