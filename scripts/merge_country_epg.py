@@ -35,18 +35,58 @@ REPORT_OUT = EPG_DIR / "country-merge-report.json"
 
 # Country feeds currently listed by the public IPTV-EPG guide directory.
 COUNTRY_CODES = set("""
-AL AR AM AU AT BS BY BE BO BA BR BG CA CL CO CR HR CW CZ DK DO EG SV FI FR
-GE DE GH GR GT HN HK HU IS IN ID IL IT JM LV LB LT LU MK MY MT MX ME NL NZ
-NI NG NO PA PY PE PH PL PT RO RU RS SG SI ZA KR ES SE CH TW TH TT TR UG UA
-AE GB US UY VE ZW
+AD AE AL AM AR AT AU BA BB BE BG BO BR BS BY CA CH CI CL CN CO CR CU CW CY
+CZ DE DK DO EC EE EG ES FI FR GB GE GH GR GT HK HN HR HU ID IE IL IN IS IT
+JM JP KE KR LB LT LU LV MA MD ME MG MK ML MO MT MU MW MX MY MZ NA NC NG NI
+NL NO NZ PA PE PH PK PL PR PS PT PY QA RE RO RS RU SA SE SG SI SK SN SV TH
+TR TT TW TZ UA UG US UY UZ VE VN ZA ZM ZW
 """.split())
 COUNTRY_ALIASES = {
-    "UK": "GB",
-    "USA": "US",
-    "UAE": "AE",
-    "RSA": "ZA",
-    "KOR": "KR",
-    "RUS": "RU",
+    "UK": "GB", "USA": "US", "UAE": "AE", "RSA": "ZA",
+    "KOR": "KR", "RUS": "RU", "ROM": "RO", "MEX": "MX",
+}
+
+OPEN_EPG_FEEDS = {
+    "AL": ["albania"], "AR": ["argentina"], "AU": ["australia"], "AT": ["austria"],
+    "BB": ["barbados"], "BE": ["belgium"], "BO": ["bolivia"], "BA": ["bosnia"],
+    "BR": ["brazil"], "BG": ["bulgaria1", "bulgaria2", "bulgaria4"],
+    "CA": ["canada"], "CL": ["chile1", "chile2"], "CN": ["china1", "china3"],
+    "CO": ["colombia1", "colombia2"], "CR": ["costarica1"], "HR": ["croatia"],
+    "CY": ["cyprus1", "cyprus2"], "CZ": ["czech1", "czech3", "czech4"],
+    "DK": ["denmark"], "DO": ["dominican1"], "EC": ["ecuador1"],
+    "EG": ["egypt1", "egypt2"], "SV": ["elsalvador1"], "EE": ["estonia1"],
+    "FI": ["finland"], "FR": ["france"], "GE": ["georgia1", "georgia2"],
+    "DE": ["germany"], "GH": ["ghana1"], "GR": ["greece"], "GT": ["guatemala"],
+    "HN": ["honduras"], "HK": ["hongkong1", "hongkong2", "hongkong3", "hongkong4", "hongkong5"],
+    "HU": ["hungary1"], "IS": ["iceland"], "IN": ["india"], "ID": ["indonesia"],
+    "IE": ["ireland"], "IL": ["israel"], "IT": ["italy1", "italy2", "italy3", "italy4", "italy5", "italy7", "italy8"],
+    "CI": ["ivorycoast1"], "JM": ["jamaica"], "JP": ["japan1", "japan2", "japan3"],
+    "KE": ["kenya1", "kenya2"], "KR": ["korea1"], "LV": ["latvia1", "latvia2"],
+    "LT": ["lithuania"], "LU": ["luxembourg1"], "MO": ["macau1"],
+    "MK": ["macedonia1"], "MG": ["madagascar1"], "MW": ["malawi1", "malawi2"],
+    "MY": ["malaysia1", "malaysia2", "malaysia3"], "MT": ["malta1"],
+    "MU": ["mauritius1"], "MX": ["mexico1", "mexico2"], "MD": ["moldova"],
+    "MN": ["mongolia1"], "ME": ["montenegro1"], "MA": ["morocco1", "morocco2"],
+    "MZ": ["mozambique1"], "NA": ["namibia1"], "NL": ["netherlands"],
+    "NC": ["newcaledonia1"], "NZ": ["newzealand"], "NG": ["nigeria1"],
+    "NO": ["norway"], "PK": ["pakistan4"], "PS": ["palestine1"], "PA": ["panama1"],
+    "PY": ["paraguay1", "paraguay2"], "PE": ["peru"], "PL": ["poland"],
+    "PT": ["portugal"], "PR": ["puertorico1", "puertorico2"],
+    "QA": ["qatar1", "qatar2", "qatar3", "qatar4", "qatar5", "qatar6"],
+    "RE": ["reunion1"], "RO": ["romania"], "RU": ["russia"], "SA": ["saudiarabia"],
+    "SN": ["senegal1"], "RS": ["serbia1", "serbia2", "serbia4", "serbia5"],
+    "SG": ["singapore1", "singapore2", "singapore3"],
+    "SK": ["slovakia1", "slovakia2", "slovakia3"], "SI": ["slovenia"],
+    "ZA": ["southafrica1", "southafrica2"], "ES": ["spain"],
+    "SE": ["sweden1", "sweden2", "sweden3", "sweden4"],
+    "CH": ["switzerland2", "switzerland3", "switzerland4"],
+    "TW": ["taiwan1", "taiwan2"], "TZ": ["tanzania1"], "TH": ["thailand2"],
+    "TT": ["trinidad"], "TR": ["turkey1", "turkey2", "turkey3", "turkey4", "turkey5"],
+    "AE": ["uae6"], "UG": ["uganda1", "uganda2"], "UA": ["ukraine"],
+    "GB": ["unitedkingdom"],
+    "US": ["unitedstates1", "unitedstates2", "unitedstates3", "unitedstates4", "unitedstates5", "unitedstates6", "unitedstates7", "unitedstates8", "unitedstates9", "unitedstates10", "unitedstates11"],
+    "UY": ["uruguay"], "UZ": ["uzbekistan1"], "VE": ["venezuela1"],
+    "VN": ["vietnam1"], "ZM": ["zambia1"], "ZW": ["zimbabwe1"],
 }
 
 BLOCKED_TERMS = (
@@ -88,26 +128,28 @@ def attrs_from_extinf(line: str) -> dict[str, str]:
     }
 
 
-def country_for(attrs: dict[str, str]) -> str:
-    explicit = (attrs.get("tvg-country") or "").strip().upper()
-    explicit = COUNTRY_ALIASES.get(explicit, explicit)
-    if explicit in COUNTRY_CODES:
-        return explicit
-    group = attrs.get("group-title", "")
-    m = re.match(r"^\s*([A-Z]{2})\s*\|", group, re.I)
-    if m:
-        group_code = COUNTRY_ALIASES.get(m.group(1).upper(), m.group(1).upper())
-        if group_code in COUNTRY_CODES:
-            return group_code
-    channel_id = attrs.get("tvg-id", "")
-    # Covers IDs such as Channel.ng and US local IDs such as Station.us_locals1.
-    m = re.search(r"\.([a-z]{2})(?:_[a-z0-9]+)?$", channel_id, re.I)
-    if m:
-        id_code = COUNTRY_ALIASES.get(m.group(1).upper(), m.group(1).upper())
-        if id_code in COUNTRY_CODES:
-            return id_code
-    return ""
-
+def countries_for(attrs: dict[str, str]) -> set[str]:
+    found: set[str] = set()
+    raw = (attrs.get("tvg-country") or "").upper()
+    for part in re.split(r"[;,|/\s]+", raw):
+        code = COUNTRY_ALIASES.get(part.strip(), part.strip())
+        if code in COUNTRY_CODES:
+            found.add(code)
+    if not found:
+        group = attrs.get("group-title", "")
+        match = re.match(r"^\s*([A-Z]{2,3})\s*\|", group, re.I)
+        if match:
+            code = COUNTRY_ALIASES.get(match.group(1).upper(), match.group(1).upper())
+            if code in COUNTRY_CODES:
+                found.add(code)
+    if not found:
+        channel_id = attrs.get("tvg-id", "").split("@", 1)[0]
+        match = re.search(r"\.([a-z]{2,3})(?:_[a-z0-9]+)?$", channel_id, re.I)
+        if match:
+            code = COUNTRY_ALIASES.get(match.group(1).upper(), match.group(1).upper())
+            if code in COUNTRY_CODES:
+                found.add(code)
+    return found
 
 def load_playlist():
     if not PLAYLIST.is_file():
@@ -135,8 +177,8 @@ def load_playlist():
                 continue
             ids.add(tvg_id)
             titles_by_id.setdefault(tvg_id, title)
-            country = country_for(attrs)
-            if country:
+            row_countries = countries_for(attrs)
+            for country in row_countries:
                 countries.add(country)
                 key = normalize_name(title)
                 if key:
@@ -187,6 +229,44 @@ def download_country(code: str, directory: Path):
                 pass
             time.sleep(1.0 + attempt)
     return code, None, 0, last_error
+
+
+def download_open_epg(code: str, slug: str, directory: Path):
+    url = f"https://www.open-epg.com/files/{slug}.xml.gz"
+    target = directory / f"open-epg-{slug}.xml.gz"
+    last_error = None
+    for attempt in range(3):
+        try:
+            request = urllib.request.Request(
+                url,
+                headers={
+                    "User-Agent": USER_AGENT,
+                    "Accept": "application/gzip,application/octet-stream,*/*",
+                    "Accept-Encoding": "identity",
+                },
+            )
+            with urllib.request.urlopen(request, timeout=HTTP_TIMEOUT) as response:
+                if response.status != 200:
+                    raise RuntimeError(f"HTTP {response.status}")
+                ctype = response.headers.get("Content-Type", "").casefold()
+                if not any(x in ctype for x in ("gzip", "octet-stream", "force-download", "application/x-gzip")):
+                    raise RuntimeError(f"Unexpected Open-EPG content type: {ctype}")
+                with target.open("wb") as out:
+                    shutil.copyfileobj(response, out, length=1024 * 1024)
+            if target.stat().st_size < 128:
+                raise RuntimeError("Open-EPG guide is unexpectedly small")
+            with gzip.open(target, "rb") as check:
+                if not check.read(1):
+                    raise RuntimeError("Open-EPG compressed guide is empty")
+            return code, slug, target, target.stat().st_size, None
+        except Exception as exc:
+            last_error = str(exc)
+            try:
+                target.unlink(missing_ok=True)
+            except OSError:
+                pass
+            time.sleep(1.0 + attempt)
+    return code, slug, None, 0, last_error
 
 
 def local_tag(element) -> str:
@@ -391,11 +471,30 @@ def main():
                     failures[code] = error
                     print(f"WARNING: {code} guide download failed: {error}", file=sys.stderr)
 
+        open_tasks = [(code, slug) for code in selected for slug in OPEN_EPG_FEEDS.get(code, [])]
+        open_files = []
+        open_failures = {}
+        with cf.ThreadPoolExecutor(max_workers=MAX_WORKERS) as pool:
+            futures = [pool.submit(download_open_epg, code, slug, tempdir) for code, slug in open_tasks]
+            for future in cf.as_completed(futures):
+                code, slug, path, size, error = future.result()
+                if path:
+                    open_files.append((code, slug, path))
+                    print(f"Downloaded Open-EPG {code}/{slug}: {size:,} bytes")
+                else:
+                    open_failures[f"{code}/{slug}"] = error
+                    print(f"WARNING: Open-EPG {code}/{slug} download failed: {error}", file=sys.stderr)
+
         seen: set[tuple[str, str]] = set()
         spool_path = tempdir / "programmes.xml.part"
         with spool_path.open("wb") as spool:
-            # Fresh country feeds take priority. The previously published
-            # iptv-org guide fills only programme slots not supplied by them.
+            # Direct provider scrapes are preferred, then regional guides,
+            # then the previously published guide fills only empty time slots.
+            extra_guide = EPG_DIR / "extra.xml"
+            extra_guide_gz = EPG_DIR / "extra.xml.gz"
+            if not extra_guide.is_file() and extra_guide_gz.is_file():
+                extra_guide = extra_guide_gz
+            direct_count = parse_base_guide(extra_guide, ids, titles_by_id, spool, seen)
             country_counts = {}
             for code, path in sorted(country_files.items()):
                 mapping = map_country_channels(path, code, ids, by_country_name, global_name_ids)
@@ -405,6 +504,15 @@ def main():
                     "programmes_added": added,
                 }
                 print(f"{code}: mapped {country_counts[code]['mapped_channels']} channels; added {added} programmes")
+            open_counts = {}
+            for code, slug, path in sorted(open_files):
+                mapping = map_country_channels(path, code, ids, by_country_name, global_name_ids)
+                added = parse_country_programmes(path, mapping, titles_by_id, spool, seen)
+                open_counts[f"{code}/{slug}"] = {
+                    "mapped_channels": len(set(mapping.values())),
+                    "programmes_added": added,
+                }
+                print(f"Open-EPG {code}/{slug}: mapped {open_counts[f'{code}/{slug}']['mapped_channels']} channels; added {added} programmes")
             base_count = parse_base_guide(BASE_XML, ids, titles_by_id, spool, seen)
 
         covered, xml_bytes, gz_bytes = write_merged_guide(
@@ -417,6 +525,11 @@ def main():
             "country_feeds_selected": selected,
             "country_feeds_downloaded": sorted(country_files),
             "country_feed_failures": failures,
+            "open_epg_feeds_selected": len(open_tasks),
+            "open_epg_feeds_downloaded": len(open_files),
+            "open_epg_feed_failures": open_failures,
+            "open_epg_feed_results": open_counts,
+            "direct_provider_programmes_added": direct_count,
             "base_iptv_org_programmes_kept": base_count,
             "country_feed_results": country_counts,
             "programme_records_in_merged_guide": len(seen),
@@ -425,7 +538,7 @@ def main():
             "xmltv_size_bytes": xml_bytes,
             "xmltv_gzip_size_bytes": gz_bytes,
             "match_policy": "Exact TVG/XMLTV ID, or exact normalized display-name match in the same country when unambiguous. No fuzzy name matching and no synthetic programmes.",
-            "guide_source": "Fresh iptv-epg.org country XMLTV feeds prioritized over the previously published iptv-org/epg guide.",
+            "guide_source": "Direct iptv-org/epg site scrapes, iptv-epg.org country guides, Open-EPG public country guides, and the previous XMLTV guide as a fallback.",
 
             "filtered_categories": "Unsafe or inappropriate channel labels and programme titles/descriptions are excluded.",
             "programme_time_window": "Current programmes and programmes scheduled within the next 72 hours; stale programme records are omitted.",
