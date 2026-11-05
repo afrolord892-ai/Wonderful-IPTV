@@ -610,9 +610,9 @@ def main() -> int:
         for key in allowed_attrs:
             value = source_attrs.get(key)
             if value:
-                value = re.sub(r"[\\r\\n]+", " ", value).replace("&", "&amp;").replace('"', "&quot;")
+                value = re.sub(r"[\r\n]+", " ", value).replace("&", "&amp;").replace('"', "&quot;")
                 rendered_attrs.append(f'{key}="{value}"')
-        title = re.sub(r"[\\r\\n]+", " ", clean_name(entry.name)).strip() or "Unknown channel"
+        title = re.sub(r"[\r\n]+", " ", clean_name(entry.name)).strip() or "Unknown channel"
         suffix = (" " + " ".join(rendered_attrs)) if rendered_attrs else ""
         return f"#EXTINF:-1{suffix},{title}"
 
@@ -620,7 +620,7 @@ def main() -> int:
     for entry in deduped:
         output_lines.append(smarters_extinf(entry))
         output_lines.append(entry.url)
-    OUT.write_text("\\n".join(output_lines) + "\\n", encoding="utf-8")
+    OUT.write_text("\n".join(output_lines) + "\n", encoding="utf-8")
 
     counters["final_channels_or_streams"] = len(deduped)
     counters["unique_channel_identities"] = len({e.channel_key for e in deduped})
