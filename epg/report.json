@@ -1,13 +1,596 @@
 {
   "playlist_stream_entries": 30867,
   "playlist_unique_tvg_ids": 26621,
-  "xmltv_channel_ids": 950,
-  "xmltv_channel_ids_with_programmes": 822,
-  "playlist_tvg_ids_with_programmes": 822,
-  "playlist_entries_with_programmes": 1370,
-  "unique_channel_id_coverage_percent": 3.09,
+  "xmltv_channel_ids": 1868,
+  "xmltv_channel_ids_with_programmes": 1868,
+  "playlist_tvg_ids_with_programmes": 1868,
+  "playlist_entries_with_programmes": 3120,
+  "unique_channel_id_coverage_percent": 7.02,
   "guide_days": 2,
   "guide_url": "https://raw.githubusercontent.com/afrolord892-ai/Wonderful-IPTV/main/epg/guide.xml.gz",
   "match_method": "Exact tvg-id to XMLTV channel/programme ID matching only.",
-  "limitations": "Only channels with a matching public guide source and programme data are covered; unmatched channels remain without EPG."
+  "limitations": "Only channels with a matching public guide source and programme data are covered; unmatched channels remain without EPG.",
+  "country_feed_merge": {
+    "playlist_tvg_ids": 26621,
+    "playlist_entries": 37269,
+    "playlist_countries_found": [
+      "AE",
+      "AL",
+      "AM",
+      "AR",
+      "AT",
+      "AU",
+      "BA",
+      "BE",
+      "BG",
+      "BO",
+      "BR",
+      "BS",
+      "BY",
+      "CA",
+      "CH",
+      "CL",
+      "CO",
+      "CR",
+      "CZ",
+      "DE",
+      "DK",
+      "DO",
+      "EG",
+      "ES",
+      "FI",
+      "FR",
+      "GB",
+      "GE",
+      "GH",
+      "GR",
+      "GT",
+      "HK",
+      "HN",
+      "HR",
+      "HU",
+      "ID",
+      "IL",
+      "IN",
+      "IS",
+      "IT",
+      "JM",
+      "KR",
+      "LB",
+      "LT",
+      "LU",
+      "LV",
+      "ME",
+      "MK",
+      "MT",
+      "MX",
+      "MY",
+      "NG",
+      "NI",
+      "NL",
+      "NO",
+      "NZ",
+      "PA",
+      "PE",
+      "PH",
+      "PL",
+      "PT",
+      "PY",
+      "RO",
+      "RS",
+      "RU",
+      "SE",
+      "SG",
+      "SI",
+      "SV",
+      "TH",
+      "TR",
+      "TT",
+      "TW",
+      "UA",
+      "UG",
+      "US",
+      "UY",
+      "VE",
+      "ZA",
+      "ZW"
+    ],
+    "country_feeds_selected": [
+      "AE",
+      "AL",
+      "AM",
+      "AR",
+      "AT",
+      "AU",
+      "BA",
+      "BE",
+      "BG",
+      "BO",
+      "BR",
+      "BS",
+      "BY",
+      "CA",
+      "CH",
+      "CL",
+      "CO",
+      "CR",
+      "CZ",
+      "DE",
+      "DK",
+      "DO",
+      "EG",
+      "ES",
+      "FI",
+      "FR",
+      "GB",
+      "GE",
+      "GH",
+      "GR",
+      "GT",
+      "HK",
+      "HN",
+      "HR",
+      "HU",
+      "ID",
+      "IL",
+      "IN",
+      "IS",
+      "IT",
+      "JM",
+      "KR",
+      "LB",
+      "LT",
+      "LU",
+      "LV",
+      "ME",
+      "MK",
+      "MT",
+      "MX",
+      "MY",
+      "NG",
+      "NI",
+      "NL",
+      "NO",
+      "NZ",
+      "PA",
+      "PE",
+      "PH",
+      "PL",
+      "PT",
+      "PY",
+      "RO",
+      "RS",
+      "RU",
+      "SE",
+      "SG",
+      "SI",
+      "SV",
+      "TH",
+      "TR",
+      "TT",
+      "TW",
+      "UA",
+      "UG",
+      "US",
+      "UY",
+      "VE",
+      "ZA",
+      "ZW"
+    ],
+    "country_feeds_downloaded": [
+      "AE",
+      "AL",
+      "AM",
+      "AR",
+      "AT",
+      "AU",
+      "BA",
+      "BE",
+      "BG",
+      "BO",
+      "BR",
+      "BS",
+      "BY",
+      "CA",
+      "CH",
+      "CL",
+      "CO",
+      "CR",
+      "CZ",
+      "DE",
+      "DK",
+      "DO",
+      "EG",
+      "ES",
+      "FI",
+      "FR",
+      "GB",
+      "GE",
+      "GH",
+      "GR",
+      "GT",
+      "HK",
+      "HN",
+      "HR",
+      "HU",
+      "ID",
+      "IL",
+      "IN",
+      "IS",
+      "IT",
+      "JM",
+      "KR",
+      "LB",
+      "LT",
+      "LU",
+      "LV",
+      "ME",
+      "MK",
+      "MT",
+      "MX",
+      "MY",
+      "NG",
+      "NI",
+      "NL",
+      "NO",
+      "NZ",
+      "PA",
+      "PE",
+      "PH",
+      "PL",
+      "PT",
+      "PY",
+      "RO",
+      "RS",
+      "RU",
+      "SE",
+      "SG",
+      "SI",
+      "SV",
+      "TH",
+      "TR",
+      "TT",
+      "TW",
+      "UA",
+      "UG",
+      "US",
+      "UY",
+      "VE",
+      "ZA",
+      "ZW"
+    ],
+    "country_feed_failures": {},
+    "base_iptv_org_programmes_kept": 19078,
+    "country_feed_results": {
+      "AE": {
+        "mapped_channels": 0,
+        "programmes_added": 0
+      },
+      "AL": {
+        "mapped_channels": 5,
+        "programmes_added": 166
+      },
+      "AM": {
+        "mapped_channels": 0,
+        "programmes_added": 0
+      },
+      "AR": {
+        "mapped_channels": 14,
+        "programmes_added": 1014
+      },
+      "AT": {
+        "mapped_channels": 7,
+        "programmes_added": 711
+      },
+      "AU": {
+        "mapped_channels": 5,
+        "programmes_added": 547
+      },
+      "BA": {
+        "mapped_channels": 0,
+        "programmes_added": 0
+      },
+      "BE": {
+        "mapped_channels": 6,
+        "programmes_added": 551
+      },
+      "BG": {
+        "mapped_channels": 4,
+        "programmes_added": 267
+      },
+      "BO": {
+        "mapped_channels": 0,
+        "programmes_added": 0
+      },
+      "BR": {
+        "mapped_channels": 4,
+        "programmes_added": 374
+      },
+      "BS": {
+        "mapped_channels": 0,
+        "programmes_added": 0
+      },
+      "BY": {
+        "mapped_channels": 0,
+        "programmes_added": 0
+      },
+      "CA": {
+        "mapped_channels": 25,
+        "programmes_added": 1504
+      },
+      "CH": {
+        "mapped_channels": 14,
+        "programmes_added": 1769
+      },
+      "CL": {
+        "mapped_channels": 8,
+        "programmes_added": 71
+      },
+      "CO": {
+        "mapped_channels": 8,
+        "programmes_added": 0
+      },
+      "CR": {
+        "mapped_channels": 6,
+        "programmes_added": 261
+      },
+      "CZ": {
+        "mapped_channels": 3,
+        "programmes_added": 687
+      },
+      "DE": {
+        "mapped_channels": 22,
+        "programmes_added": 2163
+      },
+      "DK": {
+        "mapped_channels": 4,
+        "programmes_added": 493
+      },
+      "DO": {
+        "mapped_channels": 0,
+        "programmes_added": 0
+      },
+      "EG": {
+        "mapped_channels": 1,
+        "programmes_added": 99
+      },
+      "ES": {
+        "mapped_channels": 36,
+        "programmes_added": 2936
+      },
+      "FI": {
+        "mapped_channels": 13,
+        "programmes_added": 1127
+      },
+      "FR": {
+        "mapped_channels": 40,
+        "programmes_added": 4810
+      },
+      "GB": {
+        "mapped_channels": 47,
+        "programmes_added": 5295
+      },
+      "GE": {
+        "mapped_channels": 1,
+        "programmes_added": 47
+      },
+      "GH": {
+        "mapped_channels": 5,
+        "programmes_added": 88
+      },
+      "GR": {
+        "mapped_channels": 11,
+        "programmes_added": 683
+      },
+      "GT": {
+        "mapped_channels": 2,
+        "programmes_added": 130
+      },
+      "HK": {
+        "mapped_channels": 3,
+        "programmes_added": 363
+      },
+      "HN": {
+        "mapped_channels": 7,
+        "programmes_added": 419
+      },
+      "HR": {
+        "mapped_channels": 19,
+        "programmes_added": 2188
+      },
+      "HU": {
+        "mapped_channels": 33,
+        "programmes_added": 2884
+      },
+      "ID": {
+        "mapped_channels": 11,
+        "programmes_added": 639
+      },
+      "IL": {
+        "mapped_channels": 1,
+        "programmes_added": 71
+      },
+      "IN": {
+        "mapped_channels": 162,
+        "programmes_added": 16400
+      },
+      "IS": {
+        "mapped_channels": 2,
+        "programmes_added": 137
+      },
+      "IT": {
+        "mapped_channels": 32,
+        "programmes_added": 3334
+      },
+      "JM": {
+        "mapped_channels": 1,
+        "programmes_added": 71
+      },
+      "KR": {
+        "mapped_channels": 8,
+        "programmes_added": 568
+      },
+      "LB": {
+        "mapped_channels": 0,
+        "programmes_added": 0
+      },
+      "LT": {
+        "mapped_channels": 4,
+        "programmes_added": 284
+      },
+      "LU": {
+        "mapped_channels": 2,
+        "programmes_added": 103
+      },
+      "LV": {
+        "mapped_channels": 2,
+        "programmes_added": 211
+      },
+      "ME": {
+        "mapped_channels": 0,
+        "programmes_added": 0
+      },
+      "MK": {
+        "mapped_channels": 10,
+        "programmes_added": 710
+      },
+      "MT": {
+        "mapped_channels": 2,
+        "programmes_added": 135
+      },
+      "MX": {
+        "mapped_channels": 4,
+        "programmes_added": 289
+      },
+      "MY": {
+        "mapped_channels": 6,
+        "programmes_added": 560
+      },
+      "NG": {
+        "mapped_channels": 5,
+        "programmes_added": 274
+      },
+      "NI": {
+        "mapped_channels": 0,
+        "programmes_added": 0
+      },
+      "NL": {
+        "mapped_channels": 3,
+        "programmes_added": 841
+      },
+      "NO": {
+        "mapped_channels": 3,
+        "programmes_added": 409
+      },
+      "NZ": {
+        "mapped_channels": 11,
+        "programmes_added": 760
+      },
+      "PA": {
+        "mapped_channels": 0,
+        "programmes_added": 0
+      },
+      "PE": {
+        "mapped_channels": 5,
+        "programmes_added": 0
+      },
+      "PH": {
+        "mapped_channels": 4,
+        "programmes_added": 284
+      },
+      "PL": {
+        "mapped_channels": 79,
+        "programmes_added": 8175
+      },
+      "PT": {
+        "mapped_channels": 12,
+        "programmes_added": 873
+      },
+      "PY": {
+        "mapped_channels": 3,
+        "programmes_added": 166
+      },
+      "RO": {
+        "mapped_channels": 22,
+        "programmes_added": 1796
+      },
+      "RS": {
+        "mapped_channels": 17,
+        "programmes_added": 1476
+      },
+      "RU": {
+        "mapped_channels": 10,
+        "programmes_added": 689
+      },
+      "SE": {
+        "mapped_channels": 6,
+        "programmes_added": 423
+      },
+      "SG": {
+        "mapped_channels": 3,
+        "programmes_added": 437
+      },
+      "SI": {
+        "mapped_channels": 5,
+        "programmes_added": 355
+      },
+      "SV": {
+        "mapped_channels": 4,
+        "programmes_added": 204
+      },
+      "TH": {
+        "mapped_channels": 1,
+        "programmes_added": 69
+      },
+      "TR": {
+        "mapped_channels": 23,
+        "programmes_added": 2434
+      },
+      "TT": {
+        "mapped_channels": 3,
+        "programmes_added": 213
+      },
+      "TW": {
+        "mapped_channels": 0,
+        "programmes_added": 0
+      },
+      "UA": {
+        "mapped_channels": 39,
+        "programmes_added": 2769
+      },
+      "UG": {
+        "mapped_channels": 0,
+        "programmes_added": 0
+      },
+      "US": {
+        "mapped_channels": 203,
+        "programmes_added": 16822
+      },
+      "UY": {
+        "mapped_channels": 0,
+        "programmes_added": 0
+      },
+      "VE": {
+        "mapped_channels": 0,
+        "programmes_added": 0
+      },
+      "ZA": {
+        "mapped_channels": 9,
+        "programmes_added": 332
+      },
+      "ZW": {
+        "mapped_channels": 1,
+        "programmes_added": 71
+      }
+    },
+    "programme_records_in_merged_guide": 114109,
+    "unique_playlist_channels_with_programmes": 1868,
+    "coverage_percent_of_tvg_ids": 7.02,
+    "xmltv_size_bytes": 71717704,
+    "xmltv_gzip_size_bytes": 11145041,
+    "match_policy": "Exact TVG/XMLTV ID, or exact normalized display-name match in the same country when unambiguous. No fuzzy name matching and no synthetic programmes.",
+    "guide_source": "Fresh iptv-epg.org country XMLTV feeds prioritized over the previously published iptv-org/epg guide.",
+    "filtered_categories": "Unsafe or inappropriate channel labels and programme titles/descriptions are excluded.",
+    "programme_time_window": "Current programmes and programmes scheduled within the next 72 hours; stale programme records are omitted."
+  }
 }
