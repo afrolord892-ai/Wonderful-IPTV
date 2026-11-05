@@ -16,7 +16,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: wonderful-iptv-playlist-v2
+  group: wonderful-epg-build
   cancel-in-progress: true
 
 jobs:
