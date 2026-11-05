@@ -22,7 +22,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 120
     steps:
       - name: Check out Wonderful
         uses: actions/checkout@v4
@@ -51,23 +51,43 @@ jobs:
           print(f"Restored {target.stat().st_size:,} XMLTV bytes from {source.stat().st_size:,} compressed bytes.")
           PY
 
-      - name: Merge fresh country XMLTV guides
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Check out public EPG provider mappings
+        run: git clone --depth 1 https://github.com/iptv-org/epg.git "$RUNNER_TEMP/iptv-org-epg"
+
+      - name: Install EPG scraper dependencies
+        working-directory: ${{ runner.temp }}/iptv-org-epg
+        run: npm ci
+
+      - name: Match additional first-party guide sources
+        run: python scripts/build_epg.py prepare "$RUNNER_TEMP/iptv-org-epg"
+
+      - name: Grab additional provider schedules
+        working-directory: ${{ runner.temp }}/iptv-org-epg
+        run: |
+          npm run grab -- --channels="$GITHUB_WORKSPACE/epg/channels.xml" --output="$GITHUB_WORKSPACE/epg/extra.xml" --gzip --days=3 --maxConnections=5
+
+      - name: Merge country XMLTV guides
         run: python scripts/merge_country_epg.py
 
       - name: Verify guide coverage and attach EPG URL
         run: |
           python scripts/build_epg.py finalize
-          rm -f epg/guide.xml
+          rm -f epg/guide.xml epg/extra.xml epg/extra.xml.gz
 
       - name: Publish playlist and EPG
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add playlists/Wonderful.m3u playlists/Wonderful-report.json epg/guide.xml.gz epg/report.json epg/country-merge-report.json
+          git add playlists/Wonderful.m3u playlists/Wonderful-report.json epg/channels.xml epg/prepare-report.json epg/guide.xml.gz epg/report.json epg/prepare-report.json epg/country-merge-report.json
           if git diff --cached --quiet; then
             echo "Wonderful playlist and EPG are already up to date."
           else
-            git commit -m "Update Wonderful IPTV playlist and EPG"
+            git commit -m "Update Wonderful IPTV playlist and expanded EPG"
             git pull --rebase origin main
             git push
           fi
