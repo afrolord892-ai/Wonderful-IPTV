@@ -273,49 +273,85 @@ def host_matches(host: str, domain: str) -> bool:
     return bool(host and domain and (host == domain or host.endswith("." + domain)))
 
 
-def load_channel_database() -> tuple[dict[str, set[str]], dict[tuple[str, str], set[str]], set[str]]:
+def set_extinf_attribute(extinf: str, key: str, value: str) -> str:
+    prefix, separator, title = extinf.partition(",")
+    if not separator:
+        return extinf
+    escaped = html.escape(value, quote=True)
+    pattern = re.compile(rf'\\b{re.escape(key)}="[^"]*"', re.IGNORECASE)
+    if pattern.search(prefix):
+        prefix = pattern.sub(f'{key}="{escaped}"', prefix, count=1)
+    else:
+        prefix = f'{prefix} {key}="{escaped}"'
+    return prefix + "," + title
+
+
+def load_channel_database():
     by_id: dict[str, set[str]] = {}
     by_name_country: dict[tuple[str, str], set[str]] = {}
+    ids_by_name_country: dict[tuple[str, str], set[str]] = {}
+    ids_by_name: dict[str, set[str]] = {}
     nsfw_ids: set[str] = set()
     try:
         data = json.loads(fetch_text(CHANNELS_DB_URL, timeout=60))
     except Exception as exc:
         print(f"WARNING: channel database unavailable: {exc}", file=sys.stderr)
-        return by_id, by_name_country, nsfw_ids
+        return by_id, by_name_country, nsfw_ids, ids_by_name_country, ids_by_name
     for channel in data if isinstance(data, list) else []:
-        cid_raw = str(channel.get("id") or "").split("@", 1)[0]
-        if channel.get("is_nsfw") and cid_raw:
-            nsfw_ids.add(cid_raw.casefold())
-        website = channel.get("website") or ""
-        domain = host_of(website)
-        if not domain:
-            continue
         cid = str(channel.get("id") or "").split("@", 1)[0]
-        if cid:
-            by_id.setdefault(cid.casefold(), set()).add(domain)
+        cid_key = cid.casefold()
+        if channel.get("is_nsfw") and cid:
+            nsfw_ids.add(cid_key)
         country = str(channel.get("country") or "").upper()
         names = [channel.get("name", ""), *(channel.get("alt_names") or [])]
         for name in names:
             nkey = normalized_name(str(name))
-            if nkey:
-                by_name_country.setdefault((nkey, country), set()).add(domain)
-    return by_id, by_name_country, nsfw_ids
+            if not nkey:
+                continue
+            if cid:
+                ids_by_name_country.setdefault((nkey, country), set()).add(cid)
+                ids_by_name.setdefault(nkey, set()).add(cid)
+        website = channel.get("website") or ""
+        domain = host_of(website)
+        if domain and cid:
+            by_id.setdefault(cid_key, set()).add(domain)
+        if domain:
+            for name in names:
+                nkey = normalized_name(str(name))
+                if nkey:
+                    by_name_country.setdefault((nkey, country), set()).add(domain)
+    return by_id, by_name_country, nsfw_ids, ids_by_name_country, ids_by_name
 
 
-def enrich_and_key(entry: Entry, by_id, by_name_country) -> None:
+def enrich_and_key(entry: Entry, by_id, by_name_country,
+                   ids_by_name_country, ids_by_name) -> bool:
     attrs = attributes(entry.extinf)
-    channel_id = attrs.get("tvg-id", "").split("@", 1)[0]
-    country = (attrs.get("tvg-country") or country_from_id(attrs.get("tvg-id", ""))).upper()
+    tvg_id = (attrs.get("tvg-id") or "").strip()
+    country = (attrs.get("tvg-country") or country_from_id(tvg_id)).upper()
     if not country and attrs.get("group-title"):
-        # Keep an explicit ISO-like country code if the source uses one.
-        match = re.match(r"^([A-Z]{2,3})\s*\|", attrs["group-title"])
+        match = re.match(r"^([A-Z]{2,3})\\s*\\|", attrs["group-title"])
         country = match.group(1) if match else ""
-    entry.country = country
     entry.name_key = normalized_name(entry.name)
+
+    inferred = False
+    if not tvg_id and entry.name_key:
+        candidates = set(ids_by_name_country.get((entry.name_key, country), set())) if country else set()
+        if not candidates:
+            candidates = set(ids_by_name.get(entry.name_key, set()))
+        if len(candidates) == 1:
+            tvg_id = next(iter(candidates))
+            entry.extinf = set_extinf_attribute(entry.extinf, "tvg-id", tvg_id)
+            inferred = True
+
+    channel_id = tvg_id.split("@", 1)[0]
+    if not country:
+        country = country_from_id(tvg_id)
+    entry.country = country
     if channel_id:
         entry.channel_key = f"id:{channel_id.casefold()}"
     else:
         entry.channel_key = f"name:{country}:{entry.name_key}"
+    return inferred
 
 
 def is_verified_catalog_entry(entry: Entry, by_id, by_name_country, nsfw_ids: set[str], curated_urls: set[str]) -> bool:
@@ -446,7 +482,9 @@ def main() -> int:
             else:
                 print(f"{name}: parsed {len(parsed)} HTTP/HTTPS entries")
 
-    channels_by_id, channels_by_name_country, nsfw_ids = load_channel_database()
+    (channels_by_id, channels_by_name_country, nsfw_ids,
+     ids_by_name_country, ids_by_name) = load_channel_database()
+    counters["tvg_id_inferred"] = 0
     curated_urls = {
         e.url for e in all_entries if e.trust == "curated"
     }
@@ -457,7 +495,8 @@ def main() -> int:
     counters["iptvorg_unverified_retained"] = 0
     for entry in all_entries:
         if entry.trust == "catalog":
-            enrich_and_key(entry, channels_by_id, channels_by_name_country)
+            if enrich_and_key(entry, channels_by_id, channels_by_name_country, ids_by_name_country, ids_by_name):
+                counters[\"tvg_id_inferred\"] += 1
             if is_verified_catalog_entry(entry, channels_by_id, channels_by_name_country, nsfw_ids, curated_urls):
                 entry.trust = "IPTV-org-officially-matched"
             else:
@@ -502,7 +541,8 @@ def main() -> int:
             page_m3u, online_status = export_iptvcat_page(page_url)
             parsed = parse_m3u(page_m3u, "IPTV Cat", "discovery")
             for entry in parsed:
-                enrich_and_key(entry, channels_by_id, channels_by_name_country)
+                if enrich_and_key(entry, channels_by_id, channels_by_name_country, ids_by_name_country, ids_by_name):
+                counters[\"tvg_id_inferred\"] += 1
                 listed_status = online_status.get(entry.name_key)
                 if listed_status is False:
                     offline_count += 1
@@ -553,7 +593,8 @@ def main() -> int:
         title = entry.name.casefold()
         if any(term in group or term in title for term in BLOCKED_EXTINF):
             continue
-        enrich_and_key(entry, channels_by_id, channels_by_name_country)
+        if enrich_and_key(entry, channels_by_id, channels_by_name_country, ids_by_name_country, ids_by_name):
+            counters[\"tvg_id_inferred\"] += 1
         host = host_of(entry.url)
         if not host or any(host_matches(host, d) for d in DENIED_HOSTS):
             continue
@@ -623,6 +664,9 @@ def main() -> int:
     OUT.write_text("\n".join(output_lines) + "\n", encoding="utf-8")
 
     counters["final_channels_or_streams"] = len(deduped)
+    counters["playlist_entries_with_tvg_id"] = sum(1 for e in deduped if attributes(e.extinf).get("tvg-id"))
+    counters["playlist_entries_without_tvg_id"] = len(deduped) - counters["playlist_entries_with_tvg_id"]
+    counters["unique_tvg_ids"] = len({attributes(e.extinf).get("tvg-id") for e in deduped if attributes(e.extinf).get("tvg-id")})
     counters["unique_channel_identities"] = len({e.channel_key for e in deduped})
     counters["generated_utc"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
     counters["output_bytes"] = OUT.stat().st_size
