@@ -33,6 +33,25 @@ SOURCES = [
     ("FreeCastHub", "https://raw.githubusercontent.com/freecasthub/public-iptv/main/playlist.m3u", "curated"),
     ("LegalFreeIPTV", "https://biskyt.github.io/legalFreeIPTVplaylist/live.m3u", "curated"),
     ("Doubo Public Directory", "https://cdn.jsdelivr.net/gh/streamline-iptv/iptv-playlists@dist/index.m3u", "curated"),
+    ("WizakorHD Curated Public TV", "https://raw.githubusercontent.com/wizakorhd/iptv/main/playlist.m3u", "curated"),
+    ("Tubi FAST", "https://raw.githubusercontent.com/BuddyChewChew/app-m3u-generator/refs/heads/main/playlists/tubi_all.m3u", "curated"),
+    ("Roku FAST", "https://raw.githubusercontent.com/BuddyChewChew/app-m3u-generator/refs/heads/main/playlists/roku_all.m3u", "curated"),
+    ("Plex FAST", "https://raw.githubusercontent.com/BuddyChewChew/app-m3u-generator/refs/heads/main/playlists/plex_all.m3u", "curated"),
+    ("Pluto TV FAST", "https://raw.githubusercontent.com/BuddyChewChew/app-m3u-generator/refs/heads/main/playlists/plutotv_all.m3u", "curated"),
+    ("Samsung TV Plus FAST", "https://raw.githubusercontent.com/BuddyChewChew/app-m3u-generator/refs/heads/main/playlists/samsungtvplus_all.m3u", "curated"),
+    ("Apsattv DistroTV", "https://www.apsattv.com/distro.m3u", "curated"),
+    ("Apsattv Vizio", "https://www.apsattv.com/vizio.m3u", "curated"),
+    ("Apsattv Vidaa", "https://www.apsattv.com/vidaa.m3u", "curated"),
+    ("Apsattv Metax", "https://www.apsattv.com/metax.m3u", "curated"),
+    ("Apsattv FreeLiveSports", "https://www.apsattv.com/freelivesports.m3u", "curated"),
+    ("Apsattv GalxyTV", "https://www.apsattv.com/galxytv.m3u", "curated"),
+    ("Apsattv LocalNow", "https://www.apsattv.com/localnow.m3u", "curated"),
+    ("Apsattv TCL TV Plus", "https://www.apsattv.com/tclplus.m3u", "curated"),
+    ("Apsattv HP FAST", "https://www.apsattv.com/hp.m3u", "curated"),
+    ("Apsattv RewardedTV", "https://www.apsattv.com/rewardedtv.m3u", "curated"),
+    ("Apsattv Xumo", "https://www.apsattv.com/xumo.m3u", "curated"),
+    ("Apsattv Cineverse", "https://www.apsattv.com/cineverse.m3u", "curated"),
+    ("Apsattv Whale TV Plus", "https://www.apsattv.com/whaletvplus_all.m3u", "curated"),
 ]
 CHANNELS_DB_URL = "https://iptv-org.github.io/api/channels.json"
 IPTVCAT_SITEMAP = "https://iptvcat.com/sitemap"
@@ -58,7 +77,11 @@ BROADCASTER_HOSTS = {
 DENIED_HOSTS = {
     "freeott.top", "freem3u.xyz", "dethich.pw", "pastebin.com",
 }
-BLOCKED_EXTINF = ("adult", "xxx", "porn")
+BLOCKED_EXTINF = (
+    "adult", "xxx", "porn", "erotic", "18+",
+    "casino", "gambling", "betting", "sportsbook", "sports book",
+    "bookmaker", "wager", "poker",
+)
 QUALITY_SUFFIX = re.compile(
     r"\s*[\[(]\s*(?:\d{3,4}\s*p|sd|hd|fhd|uhd|4k|8k|not\s+24/7|hevc|h\.?264|h\.?265|"
     r"aac|avc|mpeg[\w -]*)\s*[\])]\s*$",
@@ -404,17 +427,24 @@ def main() -> int:
     all_entries: list[Entry] = []
     fetched_texts: dict[str, str] = {}
 
-    for name, url, trust in SOURCES:
+    def fetch_source(source):
+        name, url, trust = source
         try:
-            text = fetch_text(url, timeout=90)
-            fetched_texts[name] = text
-            parsed = parse_m3u(text, name, trust)
+            body = fetch_text(url, timeout=90)
+            return name, trust, parse_m3u(body, name, trust), None
+        except Exception as exc:
+            return name, trust, [], str(exc)[:300]
+
+    # Fetch many catalogues concurrently so regional/community endpoints do
+    # not make the run unnecessarily slow. The parser still validates each row.
+    with ThreadPoolExecutor(max_workers=12) as pool:
+        for name, trust, parsed, error in pool.map(fetch_source, SOURCES):
             counters["source_entries"][name] = len(parsed)
             all_entries.extend(parsed)
-            print(f"{name}: parsed {len(parsed)} HTTP/HTTPS entries")
-        except Exception as exc:
-            counters["source_entries"][name] = 0
-            print(f"WARNING: {name} unavailable: {exc}", file=sys.stderr)
+            if error:
+                print(f"WARNING: {name} unavailable: {error}", file=sys.stderr)
+            else:
+                print(f"{name}: parsed {len(parsed)} HTTP/HTTPS entries")
 
     channels_by_id, channels_by_name_country, nsfw_ids = load_channel_database()
     curated_urls = {
@@ -532,7 +562,13 @@ def main() -> int:
     # Exact duplicate URLs are removed globally; alternate URLs for one
     # channel remain. Prefer carefully curated source metadata when the same
     # URL appears more than once.
-    source_rank = {"LegalFreeIPTV": 0, "Free-TV/IPTV": 1, "Doubo Public Directory": 2, "FreeCastHub": 3, "IPTV-org": 4, "IPTV Cat": 5}
+    source_rank = {
+        "LegalFreeIPTV": 0, "Free-TV/IPTV": 1,
+        "WizakorHD Curated Public TV": 2, "Doubo Public Directory": 3,
+        "FreeCastHub": 4, "Tubi FAST": 5, "Roku FAST": 5,
+        "Plex FAST": 5, "Pluto TV FAST": 5, "Samsung TV Plus FAST": 5,
+        "IPTV-org": 6, "IPTV Cat": 7,
+    }
     kept.sort(key=lambda e: (source_rank.get(e.source, 9), e.country, e.name_key, e.url))
     deduped: list[Entry] = []
     seen_urls: set[str] = set()
@@ -551,7 +587,7 @@ def main() -> int:
 
     if len(deduped) < MINIMUM_OUTPUT_ENTRIES:
         raise RuntimeError(
-            f"Only {len(deduped)} verified entries were found; refusing to overwrite the last good playlist."
+            f"Only {len(deduped)} unique source-listed entries were found; refusing to overwrite the last good playlist."
         )
 
     # Keep groups/countries readable in IPTV Smarters. Channel-name duplicates
@@ -566,7 +602,7 @@ def main() -> int:
     header = [
         "#EXTM3U",
         "# Wonderful IPTV playlist",
-        "# Sources: IPTV-org, IPTV Cat, Free-TV/IPTV, FreeCastHub, LegalFreeIPTV, Doubo Public Directory",
+        "# Sources: IPTV-org, IPTV Cat, Free-TV/IPTV, FreeCastHub, LegalFreeIPTV, Doubo, WizakorHD, Tubi, Roku, Plex, Pluto TV, Samsung TV Plus and Apsattv.",
         "# Deduplication: each exact stream URL is listed once; distinct URLs for the same channel are retained.",
         "# Source and verification/status comments identify catalogue-listed, officially matched, online-listed, offline-listed or unknown entries.",
     ]
@@ -586,6 +622,10 @@ def main() -> int:
         "IPTV-org": "Complete HTTP/HTTPS source catalogue retained except NSFW/blocked/denied-host entries; broadcaster-domain matches are labelled.",
         "IPTV Cat": "Exported HTTP/HTTPS rows retained except NSFW/blocked/denied-host entries; online/offline/unknown status and domain-match labels are included.",
         "Doubo Public Directory": "Separate directory advertised as broadcaster-provided free public streams; availability and regional restrictions can change.",
+        "WizakorHD Curated Public TV": "Community-curated list described by its maintainer as original URLs from free services; personal-use terms and attribution apply.",
+        "Tubi/Roku/Plex/Pluto/Samsung FAST": "Community-generated service catalogues; stream availability and territorial restrictions vary. Use remains subject to the respective service terms.",
+        "Apsattv FAST catalogues": "Community-maintained free-service M3U lists; its catalogue notes that some feeds may be stale or geo-restricted.",
+
         "Free-TV/IPTV": "Curated free-TV source; subject to broadcaster and geographic restrictions.",
         "FreeCastHub": "Curated free public-broadcaster source.",
         "LegalFreeIPTV": "Curated legal-free feed with published acceptance criteria.",
