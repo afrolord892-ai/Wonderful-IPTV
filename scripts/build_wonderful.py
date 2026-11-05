@@ -646,6 +646,8 @@ def main() -> int:
     # playlist records.
     def smarters_extinf(entry: Entry) -> str:
         source_attrs = attributes(entry.extinf)
+        if entry.country and not source_attrs.get("tvg-country"):
+            source_attrs["tvg-country"] = entry.country.upper()
         allowed_attrs = ("tvg-id", "tvg-name", "tvg-logo", "group-title", "tvg-country", "tvg-language")
         rendered_attrs = []
         for key in allowed_attrs:
