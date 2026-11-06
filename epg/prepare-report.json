@@ -1,13 +1,13 @@
 {
-  "playlist_stream_entries": 30861,
-  "playlist_entries_with_safe_tvg_id": 30861,
-  "playlist_unique_tvg_ids": 26615,
-  "matched_guide_channel_ids": 3584,
+  "playlist_stream_entries": 30936,
+  "playlist_entries_with_safe_tvg_id": 30936,
+  "playlist_unique_tvg_ids": 26668,
+  "matched_guide_channel_ids": 3588,
   "matched_source_mapping_counts": {
     "aljazeera.com": 1,
     "digiturk.com.tr": 8,
     "distro.tv": 34,
-    "epgshare01.online": 1008,
+    "epgshare01.online": 1011,
     "freeview.co.uk": 92,
     "frikanalen.no": 1,
     "i.mjh.nz": 1816,
@@ -19,13 +19,13 @@
     "tv.cctv.com": 43,
     "tvcubana.icrt.cu": 3,
     "tvplus.com.tr": 96,
-    "tvtv.us": 228
+    "tvtv.us": 229
   },
   "match_method_counts": {
-    "exact_id": 1299,
-    "unique_name": 2285
+    "exact_id": 1301,
+    "unique_name": 2287
   },
-  "ambiguous_name_mappings_skipped": 295,
+  "ambiguous_name_mappings_skipped": 293,
   "guide_days_requested": 2,
   "match_method": "Exact TVG/XMLTV IDs first; otherwise unique exact normalized channel names within a source country. Ambiguous names are not guessed."
 }
