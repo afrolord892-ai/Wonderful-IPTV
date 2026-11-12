@@ -315,8 +315,8 @@
     "ZW"
   ],
   "country_feed_failures": {
-    "AD": "HTTP Error 404: Not Found",
     "BB": "HTTP Error 404: Not Found",
+    "AD": "HTTP Error 404: Not Found",
     "CI": "HTTP Error 404: Not Found",
     "CN": "HTTP Error 404: Not Found",
     "CU": "HTTP Error 404: Not Found",
@@ -348,27 +348,27 @@
   "open_epg_feed_results": {
     "AE/uae6": {
       "mapped_channels": 4,
-      "programmes_added": 212
+      "programmes_added": 222
     },
     "AL/albania": {
       "mapped_channels": 8,
-      "programmes_added": 125
+      "programmes_added": 117
     },
     "AR/argentina": {
       "mapped_channels": 26,
-      "programmes_added": 415
+      "programmes_added": 563
     },
     "AT/austria": {
       "mapped_channels": 7,
-      "programmes_added": 144
+      "programmes_added": 142
     },
     "AU/australia": {
       "mapped_channels": 7,
-      "programmes_added": 161
+      "programmes_added": 157
     },
     "BA/bosnia": {
       "mapped_channels": 4,
-      "programmes_added": 182
+      "programmes_added": 177
     },
     "BB/barbados": {
       "mapped_channels": 0,
@@ -376,7 +376,7 @@
     },
     "BE/belgium": {
       "mapped_channels": 8,
-      "programmes_added": 198
+      "programmes_added": 106
     },
     "BG/bulgaria1": {
       "mapped_channels": 4,
@@ -388,19 +388,19 @@
     },
     "BG/bulgaria4": {
       "mapped_channels": 2,
-      "programmes_added": 203
+      "programmes_added": 263
     },
     "BO/bolivia": {
       "mapped_channels": 2,
-      "programmes_added": 56
+      "programmes_added": 69
     },
     "BR/brazil": {
       "mapped_channels": 32,
-      "programmes_added": 589
+      "programmes_added": 619
     },
     "CA/canada": {
       "mapped_channels": 21,
-      "programmes_added": 204
+      "programmes_added": 226
     },
     "CH/switzerland2": {
       "mapped_channels": 12,
@@ -408,7 +408,7 @@
     },
     "CH/switzerland3": {
       "mapped_channels": 3,
-      "programmes_added": 33
+      "programmes_added": 31
     },
     "CH/switzerland4": {
       "mapped_channels": 0,
@@ -416,11 +416,11 @@
     },
     "CI/ivorycoast1": {
       "mapped_channels": 1,
-      "programmes_added": 86
+      "programmes_added": 82
     },
     "CL/chile1": {
       "mapped_channels": 3,
-      "programmes_added": 31
+      "programmes_added": 33
     },
     "CL/chile2": {
       "mapped_channels": 4,
@@ -432,15 +432,15 @@
     },
     "CN/china3": {
       "mapped_channels": 13,
-      "programmes_added": 794
+      "programmes_added": 324
     },
     "CO/colombia1": {
       "mapped_channels": 6,
-      "programmes_added": 127
+      "programmes_added": 120
     },
     "CO/colombia2": {
       "mapped_channels": 5,
-      "programmes_added": 151
+      "programmes_added": 145
     },
     "CR/costarica1": {
       "mapped_channels": 0,
@@ -460,7 +460,7 @@
     },
     "CZ/czech3": {
       "mapped_channels": 4,
-      "programmes_added": 157
+      "programmes_added": 158
     },
     "CZ/czech4": {
       "mapped_channels": 0,
@@ -468,11 +468,11 @@
     },
     "DE/germany": {
       "mapped_channels": 31,
-      "programmes_added": 836
+      "programmes_added": 891
     },
     "DK/denmark": {
       "mapped_channels": 8,
-      "programmes_added": 428
+      "programmes_added": 225
     },
     "DO/dominican1": {
       "mapped_channels": 0,
@@ -484,7 +484,7 @@
     },
     "EE/estonia1": {
       "mapped_channels": 1,
-      "programmes_added": 57
+      "programmes_added": 55
     },
     "EG/egypt1": {
       "mapped_channels": 0,
@@ -492,23 +492,23 @@
     },
     "EG/egypt2": {
       "mapped_channels": 1,
-      "programmes_added": 18
+      "programmes_added": 21
     },
     "ES/spain": {
       "mapped_channels": 55,
-      "programmes_added": 2029
+      "programmes_added": 1943
     },
     "FI/finland": {
       "mapped_channels": 16,
-      "programmes_added": 197
+      "programmes_added": 384
     },
     "FR/france": {
       "mapped_channels": 48,
-      "programmes_added": 504
+      "programmes_added": 570
     },
     "GB/unitedkingdom": {
       "mapped_channels": 62,
-      "programmes_added": 907
+      "programmes_added": 923
     },
     "GE/georgia1": {
       "mapped_channels": 0,
@@ -520,11 +520,11 @@
     },
     "GH/ghana1": {
       "mapped_channels": 1,
-      "programmes_added": 6
+      "programmes_added": 0
     },
     "GR/greece": {
       "mapped_channels": 14,
-      "programmes_added": 312
+      "programmes_added": 299
     },
     "GT/guatemala": {
       "mapped_channels": 2,
@@ -544,7 +544,7 @@
     },
     "HK/hongkong4": {
       "mapped_channels": 2,
-      "programmes_added": 114
+      "programmes_added": 112
     },
     "HK/hongkong5": {
       "mapped_channels": 2,
@@ -560,15 +560,15 @@
     },
     "HU/hungary1": {
       "mapped_channels": 2,
-      "programmes_added": 2
+      "programmes_added": 3
     },
     "ID/indonesia": {
       "mapped_channels": 22,
-      "programmes_added": 375
+      "programmes_added": 337
     },
     "IE/ireland": {
       "mapped_channels": 6,
-      "programmes_added": 78
+      "programmes_added": 73
     },
     "IL/israel": {
       "mapped_channels": 0,
@@ -576,7 +576,7 @@
     },
     "IN/india": {
       "mapped_channels": 226,
-      "programmes_added": 4442
+      "programmes_added": 4391
     },
     "IS/iceland": {
       "mapped_channels": 3,
@@ -588,11 +588,11 @@
     },
     "IT/italy2": {
       "mapped_channels": 15,
-      "programmes_added": 570
+      "programmes_added": 500
     },
     "IT/italy3": {
       "mapped_channels": 15,
-      "programmes_added": 238
+      "programmes_added": 519
     },
     "IT/italy4": {
       "mapped_channels": 11,
@@ -600,15 +600,15 @@
     },
     "IT/italy5": {
       "mapped_channels": 11,
-      "programmes_added": 382
+      "programmes_added": 311
     },
     "IT/italy7": {
       "mapped_channels": 4,
-      "programmes_added": 40
+      "programmes_added": 39
     },
     "IT/italy8": {
       "mapped_channels": 10,
-      "programmes_added": 61
+      "programmes_added": 84
     },
     "JM/jamaica": {
       "mapped_channels": 0,
@@ -628,7 +628,7 @@
     },
     "KE/kenya1": {
       "mapped_channels": 2,
-      "programmes_added": 57
+      "programmes_added": 44
     },
     "KE/kenya2": {
       "mapped_channels": 0,
@@ -636,11 +636,11 @@
     },
     "KR/korea1": {
       "mapped_channels": 3,
-      "programmes_added": 39
+      "programmes_added": 75
     },
     "LT/lithuania": {
       "mapped_channels": 8,
-      "programmes_added": 303
+      "programmes_added": 315
     },
     "LU/luxembourg1": {
       "mapped_channels": 0,
@@ -648,11 +648,11 @@
     },
     "LV/latvia1": {
       "mapped_channels": 4,
-      "programmes_added": 131
+      "programmes_added": 130
     },
     "LV/latvia2": {
       "mapped_channels": 3,
-      "programmes_added": 6
+      "programmes_added": 13
     },
     "MA/morocco1": {
       "mapped_channels": 3,
@@ -664,7 +664,7 @@
     },
     "MD/moldova": {
       "mapped_channels": 4,
-      "programmes_added": 214
+      "programmes_added": 207
     },
     "ME/montenegro1": {
       "mapped_channels": 0,
@@ -692,11 +692,11 @@
     },
     "MX/mexico1": {
       "mapped_channels": 2,
-      "programmes_added": 2
+      "programmes_added": 0
     },
     "MX/mexico2": {
       "mapped_channels": 1,
-      "programmes_added": 20
+      "programmes_added": 38
     },
     "MY/malaysia1": {
       "mapped_channels": 2,
@@ -728,15 +728,15 @@
     },
     "NL/netherlands": {
       "mapped_channels": 13,
-      "programmes_added": 712
+      "programmes_added": 685
     },
     "NO/norway": {
       "mapped_channels": 5,
-      "programmes_added": 223
+      "programmes_added": 224
     },
     "NZ/newzealand": {
       "mapped_channels": 11,
-      "programmes_added": 6
+      "programmes_added": 7
     },
     "PA/panama1": {
       "mapped_channels": 0,
@@ -744,7 +744,7 @@
     },
     "PE/peru": {
       "mapped_channels": 8,
-      "programmes_added": 196
+      "programmes_added": 199
     },
     "PK/pakistan4": {
       "mapped_channels": 0,
@@ -752,7 +752,7 @@
     },
     "PL/poland": {
       "mapped_channels": 113,
-      "programmes_added": 631
+      "programmes_added": 569
     },
     "PR/puertorico1": {
       "mapped_channels": 0,
@@ -768,7 +768,7 @@
     },
     "PT/portugal": {
       "mapped_channels": 15,
-      "programmes_added": 269
+      "programmes_added": 383
     },
     "PY/paraguay1": {
       "mapped_channels": 0,
@@ -804,15 +804,15 @@
     },
     "RO/romania": {
       "mapped_channels": 31,
-      "programmes_added": 231
+      "programmes_added": 238
     },
     "RS/serbia1": {
       "mapped_channels": 1,
-      "programmes_added": 139
+      "programmes_added": 107
     },
     "RS/serbia2": {
       "mapped_channels": 2,
-      "programmes_added": 0
+      "programmes_added": 67
     },
     "RS/serbia4": {
       "mapped_channels": 0,
@@ -824,7 +824,7 @@
     },
     "RU/russia": {
       "mapped_channels": 71,
-      "programmes_added": 3165
+      "programmes_added": 2534
     },
     "SA/saudiarabia": {
       "mapped_channels": 0,
@@ -832,7 +832,7 @@
     },
     "SE/sweden1": {
       "mapped_channels": 5,
-      "programmes_added": 114
+      "programmes_added": 107
     },
     "SE/sweden2": {
       "mapped_channels": 0,
@@ -840,7 +840,7 @@
     },
     "SE/sweden3": {
       "mapped_channels": 1,
-      "programmes_added": 93
+      "programmes_added": 88
     },
     "SE/sweden4": {
       "mapped_channels": 5,
@@ -872,11 +872,11 @@
     },
     "SK/slovakia3": {
       "mapped_channels": 1,
-      "programmes_added": 6
+      "programmes_added": 7
     },
     "SN/senegal1": {
       "mapped_channels": 2,
-      "programmes_added": 17
+      "programmes_added": 20
     },
     "SV/elsalvador1": {
       "mapped_channels": 1,
@@ -888,11 +888,11 @@
     },
     "TR/turkey1": {
       "mapped_channels": 4,
-      "programmes_added": 196
+      "programmes_added": 192
     },
     "TR/turkey2": {
       "mapped_channels": 5,
-      "programmes_added": 32
+      "programmes_added": 34
     },
     "TR/turkey3": {
       "mapped_channels": 1,
@@ -900,11 +900,11 @@
     },
     "TR/turkey4": {
       "mapped_channels": 3,
-      "programmes_added": 107
+      "programmes_added": 72
     },
     "TR/turkey5": {
       "mapped_channels": 3,
-      "programmes_added": 6
+      "programmes_added": 5
     },
     "TT/trinidad": {
       "mapped_channels": 0,
@@ -924,7 +924,7 @@
     },
     "UA/ukraine": {
       "mapped_channels": 39,
-      "programmes_added": 390
+      "programmes_added": 408
     },
     "UG/uganda1": {
       "mapped_channels": 0,
@@ -936,7 +936,7 @@
     },
     "US/unitedstates1": {
       "mapped_channels": 17,
-      "programmes_added": 100
+      "programmes_added": 70
     },
     "US/unitedstates10": {
       "mapped_channels": 7,
@@ -956,27 +956,27 @@
     },
     "US/unitedstates4": {
       "mapped_channels": 4,
-      "programmes_added": 47
+      "programmes_added": 56
     },
     "US/unitedstates5": {
       "mapped_channels": 16,
-      "programmes_added": 46
+      "programmes_added": 39
     },
     "US/unitedstates6": {
       "mapped_channels": 17,
-      "programmes_added": 0
+      "programmes_added": 52
     },
     "US/unitedstates7": {
       "mapped_channels": 32,
-      "programmes_added": 381
+      "programmes_added": 402
     },
     "US/unitedstates8": {
       "mapped_channels": 16,
       "programmes_added": 0
     },
     "US/unitedstates9": {
-      "mapped_channels": 6,
-      "programmes_added": 206
+      "mapped_channels": 8,
+      "programmes_added": 311
     },
     "UY/uruguay": {
       "mapped_channels": 0,
@@ -984,7 +984,7 @@
     },
     "UZ/uzbekistan1": {
       "mapped_channels": 6,
-      "programmes_added": 302
+      "programmes_added": 283
     },
     "VE/venezuela1": {
       "mapped_channels": 0,
@@ -992,7 +992,7 @@
     },
     "VN/vietnam1": {
       "mapped_channels": 2,
-      "programmes_added": 76
+      "programmes_added": 22
     },
     "ZA/southafrica1": {
       "mapped_channels": 0,
@@ -1011,8 +1011,8 @@
       "programmes_added": 0
     }
   },
-  "direct_provider_programmes_added": 80766,
-  "base_iptv_org_programmes_kept": 7335,
+  "direct_provider_programmes_added": 81396,
+  "base_iptv_org_programmes_kept": 7599,
   "country_feed_results": {
     "AE": {
       "mapped_channels": 0,
@@ -1020,7 +1020,7 @@
     },
     "AL": {
       "mapped_channels": 5,
-      "programmes_added": 220
+      "programmes_added": 224
     },
     "AM": {
       "mapped_channels": 0,
@@ -1032,11 +1032,11 @@
     },
     "AT": {
       "mapped_channels": 7,
-      "programmes_added": 731
+      "programmes_added": 720
     },
     "AU": {
       "mapped_channels": 5,
-      "programmes_added": 435
+      "programmes_added": 426
     },
     "BA": {
       "mapped_channels": 0,
@@ -1044,11 +1044,11 @@
     },
     "BE": {
       "mapped_channels": 9,
-      "programmes_added": 760
+      "programmes_added": 754
     },
     "BG": {
       "mapped_channels": 6,
-      "programmes_added": 663
+      "programmes_added": 542
     },
     "BO": {
       "mapped_channels": 0,
@@ -1056,7 +1056,7 @@
     },
     "BR": {
       "mapped_channels": 22,
-      "programmes_added": 2408
+      "programmes_added": 2426
     },
     "BS": {
       "mapped_channels": 0,
@@ -1068,11 +1068,11 @@
     },
     "CA": {
       "mapped_channels": 26,
-      "programmes_added": 1518
+      "programmes_added": 1539
     },
     "CH": {
       "mapped_channels": 14,
-      "programmes_added": 1261
+      "programmes_added": 1520
     },
     "CL": {
       "mapped_channels": 8,
@@ -1080,11 +1080,11 @@
     },
     "CO": {
       "mapped_channels": 15,
-      "programmes_added": 1023
+      "programmes_added": 1024
     },
     "CR": {
       "mapped_channels": 6,
-      "programmes_added": 366
+      "programmes_added": 377
     },
     "CW": {
       "mapped_channels": 0,
@@ -1092,15 +1092,15 @@
     },
     "CZ": {
       "mapped_channels": 3,
-      "programmes_added": 773
+      "programmes_added": 722
     },
     "DE": {
       "mapped_channels": 24,
-      "programmes_added": 2260
+      "programmes_added": 2203
     },
     "DK": {
       "mapped_channels": 4,
-      "programmes_added": 534
+      "programmes_added": 515
     },
     "DO": {
       "mapped_channels": 0,
@@ -1112,59 +1112,59 @@
     },
     "EG": {
       "mapped_channels": 1,
-      "programmes_added": 106
+      "programmes_added": 113
     },
     "ES": {
       "mapped_channels": 36,
-      "programmes_added": 2940
+      "programmes_added": 3048
     },
     "FI": {
       "mapped_channels": 13,
-      "programmes_added": 1041
+      "programmes_added": 1040
     },
     "FR": {
       "mapped_channels": 40,
-      "programmes_added": 4853
+      "programmes_added": 4802
     },
     "GB": {
       "mapped_channels": 47,
-      "programmes_added": 4714
+      "programmes_added": 4684
     },
     "GE": {
       "mapped_channels": 1,
-      "programmes_added": 43
+      "programmes_added": 44
     },
     "GH": {
       "mapped_channels": 5,
-      "programmes_added": 0
+      "programmes_added": 360
     },
     "GR": {
       "mapped_channels": 10,
-      "programmes_added": 633
+      "programmes_added": 613
     },
     "GT": {
       "mapped_channels": 2,
-      "programmes_added": 135
+      "programmes_added": 130
     },
     "HK": {
       "mapped_channels": 3,
-      "programmes_added": 358
+      "programmes_added": 361
     },
     "HN": {
       "mapped_channels": 7,
-      "programmes_added": 431
+      "programmes_added": 419
     },
     "HR": {
       "mapped_channels": 19,
-      "programmes_added": 2251
+      "programmes_added": 2205
     },
     "HU": {
       "mapped_channels": 35,
-      "programmes_added": 3315
+      "programmes_added": 3267
     },
     "ID": {
       "mapped_channels": 11,
-      "programmes_added": 550
+      "programmes_added": 530
     },
     "IL": {
       "mapped_channels": 1,
@@ -1172,15 +1172,15 @@
     },
     "IN": {
       "mapped_channels": 112,
-      "programmes_added": 11348
+      "programmes_added": 11289
     },
     "IS": {
       "mapped_channels": 2,
-      "programmes_added": 100
+      "programmes_added": 115
     },
     "IT": {
       "mapped_channels": 32,
-      "programmes_added": 3471
+      "programmes_added": 3408
     },
     "JM": {
       "mapped_channels": 1,
@@ -1204,11 +1204,11 @@
     },
     "LU": {
       "mapped_channels": 2,
-      "programmes_added": 174
+      "programmes_added": 125
     },
     "LV": {
       "mapped_channels": 2,
-      "programmes_added": 208
+      "programmes_added": 218
     },
     "ME": {
       "mapped_channels": 0,
@@ -1216,23 +1216,23 @@
     },
     "MK": {
       "mapped_channels": 10,
-      "programmes_added": 1007
+      "programmes_added": 964
     },
     "MT": {
       "mapped_channels": 2,
-      "programmes_added": 190
+      "programmes_added": 184
     },
     "MX": {
       "mapped_channels": 8,
-      "programmes_added": 396
+      "programmes_added": 406
     },
     "MY": {
       "mapped_channels": 6,
-      "programmes_added": 636
+      "programmes_added": 623
     },
     "NG": {
       "mapped_channels": 5,
-      "programmes_added": 72
+      "programmes_added": 360
     },
     "NI": {
       "mapped_channels": 0,
@@ -1240,15 +1240,15 @@
     },
     "NL": {
       "mapped_channels": 3,
-      "programmes_added": 812
+      "programmes_added": 818
     },
     "NO": {
       "mapped_channels": 3,
-      "programmes_added": 430
+      "programmes_added": 404
     },
     "NZ": {
       "mapped_channels": 11,
-      "programmes_added": 524
+      "programmes_added": 490
     },
     "PA": {
       "mapped_channels": 0,
@@ -1264,27 +1264,27 @@
     },
     "PL": {
       "mapped_channels": 94,
-      "programmes_added": 4547
+      "programmes_added": 4606
     },
     "PT": {
       "mapped_channels": 12,
-      "programmes_added": 746
+      "programmes_added": 608
     },
     "PY": {
       "mapped_channels": 5,
-      "programmes_added": 259
+      "programmes_added": 254
     },
     "RO": {
       "mapped_channels": 26,
-      "programmes_added": 2101
+      "programmes_added": 2115
     },
     "RS": {
       "mapped_channels": 17,
-      "programmes_added": 1510
+      "programmes_added": 1511
     },
     "RU": {
       "mapped_channels": 9,
-      "programmes_added": 591
+      "programmes_added": 599
     },
     "SA": {
       "mapped_channels": 9,
@@ -1292,11 +1292,11 @@
     },
     "SE": {
       "mapped_channels": 6,
-      "programmes_added": 426
+      "programmes_added": 433
     },
     "SG": {
       "mapped_channels": 3,
-      "programmes_added": 315
+      "programmes_added": 332
     },
     "SI": {
       "mapped_channels": 5,
@@ -1304,19 +1304,19 @@
     },
     "SV": {
       "mapped_channels": 4,
-      "programmes_added": 185
+      "programmes_added": 191
     },
     "TH": {
       "mapped_channels": 1,
-      "programmes_added": 114
+      "programmes_added": 110
     },
     "TR": {
       "mapped_channels": 24,
-      "programmes_added": 2132
+      "programmes_added": 2000
     },
     "TT": {
       "mapped_channels": 3,
-      "programmes_added": 238
+      "programmes_added": 229
     },
     "TW": {
       "mapped_channels": 0,
@@ -1332,7 +1332,7 @@
     },
     "US": {
       "mapped_channels": 200,
-      "programmes_added": 16761
+      "programmes_added": 16513
     },
     "UY": {
       "mapped_channels": 0,
@@ -1344,22 +1344,22 @@
     },
     "VN": {
       "mapped_channels": 8,
-      "programmes_added": 1052
+      "programmes_added": 1021
     },
     "ZA": {
       "mapped_channels": 9,
-      "programmes_added": 521
+      "programmes_added": 733
     },
     "ZW": {
       "mapped_channels": 1,
       "programmes_added": 72
     }
   },
-  "programme_records_in_merged_guide": 206301,
-  "unique_playlist_channels_with_programmes": 3412,
-  "coverage_percent_of_tvg_ids": 12.75,
-  "xmltv_size_bytes": 109820926,
-  "xmltv_gzip_size_bytes": 15537475,
+  "programme_records_in_merged_guide": 206584,
+  "unique_playlist_channels_with_programmes": 3438,
+  "coverage_percent_of_tvg_ids": 12.85,
+  "xmltv_size_bytes": 109658695,
+  "xmltv_gzip_size_bytes": 15955987,
   "match_policy": "Exact TVG/XMLTV ID, or exact normalized display-name match in the same country when unambiguous. No fuzzy name matching and no synthetic programmes.",
   "guide_source": "Direct iptv-org/epg site scrapes, iptv-epg.org country guides, Open-EPG public country guides, and the previous XMLTV guide as a fallback.",
   "filtered_categories": "Unsafe or inappropriate channel labels and programme titles/descriptions are excluded.",
